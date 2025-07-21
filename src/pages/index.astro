@@ -1,11 +1,98 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
+import Badge from "../components/Badge.astro";
+import LinkedinIcon from "../components/icons/LinkedinIcon.astro";
+import Layout from "../layouts/Layout.astro";
+import GitHubIcon from "../components/icons/GitHubIcon.astro";
+import SocialPill from "../components/SocialPill.astro";
+import InstagramIcon from "../components/icons/InstagramIcon.astro";
+import XIcon from "../components/icons/XIcon.astro";
+import Mailicon from "../components/icons/Mailicon.astro";
+import Experience from "../components/Experience.astro";
+import SectionConteiner from "../components/SectionConteiner.astro";
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
+<Layout
+  title="Portfolio de Santiago Benítez Álvarez - Desarrollador y Programador web"
+  description="Contratame a Santiago para crear tu aplicación Web. Desarrollador Web y de Contenido. Especializado en crear webs unicas"
+>
+  <main>
+    <SectionConteiner>
+      <img
+        class="rounded-full w-50 h-40 ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
+    mb-12 animate-fade-in tracking-wide"
+        src="/src/assets/Santydev_photo/_DSC7034.JPG"
+        alt="Santydev photo"
+      />
+      <h1
+        class="ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
+    mb-12 animate-fade-in tracking-wide"
+      >
+        Hey, soy Santiago Benítez Álvarez
+        <a
+          href="https://es.linkedin.com/in/santiagosba"
+          target="_blank"
+          rel="noopener"
+          class="relative -top-1.5 ml-2 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)] animate-fade-in tracking-wide"
+        >
+          <Badge>Disponible para Trabajar</Badge>
+        </a>
+      </h1>
+      <h2
+        class="ml-3 text-4xl md:text-2xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
+    mb-12 animate-fade-in tracking-wide"
+      >
+        <span>Más de dos años de experiencia.</span><span
+          class="text-blue-300"
+        >
+          Desarrollador Web y Creador de Contenido.</span
+        > De
+        <span class="text-red-300"
+          >Barcelona, España <img
+            src="https://flagcdn.com/es.svg"
+            alt="🇪🇸"
+            class="inline w-8 h-5 align-middle"
+          /></span
+        >
+        . <span class="opacity-80"
+          >Especializado en crear aplicaciones únicas</span
+        >
+      </h2>
+
+      <nav class="mt-10  animate-fade-in tracking-wide">
+        <SocialPill
+          href="https://es.linkedin.com/in/santiagosba"
+          label="LinkedIn"
+        >
+          <LinkedinIcon class="w-5 h-5 icon-glow" />
+        </SocialPill>
+
+        <SocialPill href="https://github.com/tuusuario" label="GitHub">
+          <GitHubIcon class="w-5 h-5 icon-glow" />
+        </SocialPill>
+
+        <SocialPill
+          href="https://www.instagram.com/tuusuario"
+          label="Instagram"
+        >
+          <InstagramIcon class="w-5 h-5 icon-glow" />
+        </SocialPill>
+
+        <SocialPill href="https://x.com/tuusuario">
+          <XIcon class="w-5 h-5 icon-glow" />
+        </SocialPill>
+
+        <SocialPill href="mailto:tuemail@ejemplo.com" label="Email">
+          <Mailicon class="w-5 h-5 icon glow" />
+        </SocialPill>
+
+        <a href="https://github.com/Santiagosba"> </a>
+      </nav>
+    </SectionConteiner>
+
+    <SectionConteiner>
+      <Experience />
+    </SectionConteiner>
+  </main>
 </Layout>
