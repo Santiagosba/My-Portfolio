@@ -3,27 +3,32 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 // Supports weights 100-900
 import "@fontsource-variable/onest";
-interface Props{
-  title:string
-  description: string
+interface Props {
+  title: string;
+  description: string;
 }
-const{ description, title}=Astro.props
+const { description, title } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={description} />
+    <meta
+      name="description"
+      content="Santiago's personal portfolio showcasing his work and skills."
+    />
     <title>Santiago Portfolio</title>
   </head>
   <body class="relative bg-[#000] text-white min-h-screen flex flex-col">
     <Header class="relative z-10 bg-black" />
 
-    <main class="relative flex-grow z-0">
-      <div class="fixed inset-0 z-[-2] animate-breathing-top-light"></div>
+    <main class="relative flex-grow z-0 mt-20">
+      <div class="fixed inset-0 z-[-2] animate-breathing-top-light"> </div>
 
       <slot />
     </main>

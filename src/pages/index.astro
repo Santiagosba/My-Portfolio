@@ -9,8 +9,7 @@ import XIcon from "../components/icons/XIcon.astro";
 import Mailicon from "../components/icons/Mailicon.astro";
 import Experience from "../components/Experience.astro";
 import SectionConteiner from "../components/SectionConteiner.astro";
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import BriefcaseIcon from "../components/icons/BriefcaseIcon.astro";
 ---
 
 <Layout
@@ -18,7 +17,7 @@ import SectionConteiner from "../components/SectionConteiner.astro";
   description="Contratame a Santiago para crear tu aplicación Web. Desarrollador Web y de Contenido. Especializado en crear webs unicas"
 >
   <main>
-    <SectionConteiner>
+    <SectionConteiner class="py-44 pb-24">
       <img
         class="rounded-full w-50 h-40 ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
     mb-12 animate-fade-in tracking-wide"
@@ -34,7 +33,7 @@ import SectionConteiner from "../components/SectionConteiner.astro";
           href="https://es.linkedin.com/in/santiagosba"
           target="_blank"
           rel="noopener"
-          class="relative -top-1.5 ml-2 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)] animate-fade-in tracking-wide"
+          class="w-full overflow-x-auto whitespace-nowrap relative -top-1.5 ml-2 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)] animate-fade-in tracking-wide"
         >
           <Badge>Disponible para Trabajar</Badge>
         </a>
@@ -43,9 +42,7 @@ import SectionConteiner from "../components/SectionConteiner.astro";
         class="ml-3 text-4xl md:text-2xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
     mb-12 animate-fade-in tracking-wide"
       >
-        <span>Más de dos años de experiencia.</span><span
-          class="text-blue-300"
-        >
+        <span>Más de dos años de experiencia.</span><span class="text-blue-300">
           Desarrollador Web y Creador de Contenido.</span
         > De
         <span class="text-red-300"
@@ -60,7 +57,7 @@ import SectionConteiner from "../components/SectionConteiner.astro";
         >
       </h2>
 
-      <nav class="mt-10  animate-fade-in tracking-wide">
+      <nav class="mt-10 animate-fade-in tracking-wide">
         <SocialPill
           href="https://es.linkedin.com/in/santiagosba"
           label="LinkedIn"
@@ -92,6 +89,14 @@ import SectionConteiner from "../components/SectionConteiner.astro";
     </SectionConteiner>
 
     <SectionConteiner>
+      <h2
+        class="mt-28 ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
+    mb-12 animate-fade-in tracking-wide flex items-center gap-2"
+      >
+        <BriefcaseIcon class="w-10 h-10" />
+        Experience
+      </h2>
+
       <Experience />
     </SectionConteiner>
   </main>

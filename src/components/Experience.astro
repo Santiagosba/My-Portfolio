@@ -1,8 +1,6 @@
 ---
 import ExperienceItem from "./ExperienceItem.astro";
 
-
-
 const EXPERIENCE = [
   {
     date: "February 2022",
@@ -25,23 +23,18 @@ const EXPERIENCE = [
   },
 ];
 ---
-<h2
-  class="relative -bottom-5 ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)] 
-    mb-12 animate-fade-in tracking-wide"
->
-  Experience
-</h2>
 
 
-<ol class=" border-white/30 dark:border-gray-700 pl-2 pt-3">
+
+<ol class=" border-white/30 dark:border-gray-700 pl-2 pt-3 mt-10">
   {
     EXPERIENCE.map((experience) => (
       <li class="mb-10 relative">
         <ExperienceItem {...experience} />
       </li>
     ))
-  }
-</ol>
+  }  
+</ol> 
 
 
 
