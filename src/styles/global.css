@@ -82,12 +82,12 @@
 
 @layer utilities {
     .icon-glow {
-        filter: drop-shadow(0 0 3px rgba(169, 166, 169, 0.2));
+        filter: drop-shadow(0 0 3px rgba(230, 186, 230, 0.833));
         transition: filter 0.3s ease, transform 0.3s ease;
     }
 
     .group:hover .icon-glow {
-        filter: drop-shadow(0 0 6px rgba(235, 128, 235, 0.6)) drop-shadow(0 0 12px rgba(170, 166, 170, 0.4));
+        filter: drop-shadow(0 0 6px rgb(236, 115, 236)) drop-shadow(0 0 12px rgba(238, 103, 238, 0.987));
         transform: scale(1.05);
     }
 
@@ -119,4 +119,16 @@
 
 .animate-fade-in {
   animation: fade-in 0.8s ease-out forwards;
+}
+
+@keyframes sheen {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+.animate-sheen::before {
+  animation: sheen 3s infinite;
 }

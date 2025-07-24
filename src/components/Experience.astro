@@ -6,12 +6,11 @@ const EXPERIENCE = [
     date: "March 2024 - November 2024",
     title: "Internship Agreement - Escola Tabor",
     description: [
-      
       "Maintained and updated the school’s website using WordPress.",
       "Developed a new school website from scratch using Wix.",
       "Designed and launched a new Moodle platform for parent-teacher-student communication.",
       "Used technologies including WordPress, Moodle, PHP, HTML, CSS, JavaScript, and MySQL.",
-      "Managed hosting and domain setup with IONOS, using cPanel and FTP tools like FileZilla."
+      "Managed hosting and domain setup with IONOS, using cPanel and FTP tools like FileZilla.",
     ],
     link: "https://www.tabor.cat/",
   },
@@ -22,24 +21,18 @@ const EXPERIENCE = [
       "Provided personalized customer service and technical advice on technology products.",
       "Troubleshot basic technical issues and offered user support.",
       "Managed cash register, inventory, and organized store operations.",
-      "Developed strong communication, problem-solving, and sales skills."
+      "Developed strong communication, problem-solving, and sales skills.",
     ],
-    
-  }
+  },
 ];
 ---
 
-
-
-<ol class=" border-white/30 dark:border-gray-700 pl-2 pt-3 mt-10">
+<ol class="border-white/30 dark:border-gray-700 pl-2 pt-3 mt-10">
   {
     EXPERIENCE.map((experience) => (
       <li class="mb-10 relative">
         <ExperienceItem {...experience} />
       </li>
     ))
-  }  
-</ol> 
-
-
-
+  }
+</ol>
