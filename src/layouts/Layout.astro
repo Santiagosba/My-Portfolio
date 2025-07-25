@@ -1,7 +1,6 @@
 ---
 import "../styles/global.css";
 import Header from "../components/Header.astro";
-// Supports weights 100-900
 import "@fontsource-variable/onest";
 import Footer from "../components/Footer.astro";
 interface Props {
@@ -25,16 +24,103 @@ const { description, title } = Astro.props;
     />
     <title>Santiago Portfolio</title>
   </head>
-  <body class="relative bg-[#000] text-white min-h-screen flex flex-col">
-    <Header class="relative z-10 bg-black" />
+  <body class="relative bg-black text-white min-h-screen flex flex-col overflow-x-hidden">
+    
+    <!-- 🌌 Fondo de estrellas y estrellas fugaces -->
+    <div class="fixed inset-0 -z-10 pointer-events-none">
+      <canvas id="star-canvas" class="w-full h-full"></canvas>
+    </div>
+
+    <!-- ✨ Efecto que ya tenías -->
+    <div class="fixed inset-0 z-[-2] animate-breathing-top-light"></div>
+
+    <!-- Layout principal -->
+    <Header class="relative z-10 bg-transparent" />
 
     <main class="relative flex-grow z-0 mt-20 px-4">
-      <div class="fixed inset-0 z-[-2] animate-breathing-top-light"></div>
-
       <slot />
       <Footer />
     </main>
-    
+
+    <!-- 🎇 Script inline para estrellas y estrellas fugaces -->
+    <script is:inline>
+      const canvas = document.getElementById('star-canvas');
+      const ctx = canvas.getContext('2d');
+      let stars = [];
+      let shootingStars = [];
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      function createStars(count) {
+        stars = [];
+        for (let i = 0; i < count; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            radius: Math.random() * 1.2,
+            opacity: Math.random(),
+            speed: Math.random() * 0.2,
+          });
+        }
+      }
+
+      function createShootingStar() {
+        shootingStars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height * 0.5,
+          length: Math.random() * 80 + 100,
+          speed: Math.random() * 10 + 6,
+          angle: Math.PI / 4,
+          opacity: 1,
+        });
+      }
+
+      function drawStars() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let star of stars) {
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+          ctx.fill();
+        }
+      }
+
+      function drawShootingStars() {
+        for (let i = 0; i < shootingStars.length; i++) {
+          const star = shootingStars[i];
+          const dx = Math.cos(star.angle) * star.length;
+          const dy = Math.sin(star.angle) * star.length;
+
+          ctx.beginPath();
+          ctx.moveTo(star.x, star.y);
+          ctx.lineTo(star.x - dx, star.y - dy);
+          ctx.strokeStyle = `rgba(255, 255, 255, ${star.opacity})`;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          star.x += star.speed;
+          star.y += star.speed;
+          star.opacity -= 0.01;
+
+          if (star.opacity <= 0) shootingStars.splice(i, 1);
+        }
+      }
+
+      function animate() {
+        drawStars();
+        drawShootingStars();
+        if (Math.random() < 0.01) createShootingStar();
+        requestAnimationFrame(animate);
+      }
+
+      createStars(200);
+      animate();
+    </script>
   </body>
 </html>
 
@@ -42,13 +128,16 @@ const { description, title } = Astro.props;
   :root {
     color-scheme: light dark;
   }
+
   html {
     font-family: "Onest Variable", system-ui, sans-serif;
     scroll-behavior: smooth;
   }
+
   body {
     background: transparent;
   }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;

@@ -1,0 +1,152 @@
+---
+const PROJECTS = [
+  {
+    title: "Bring Me The Horizon Media Player",
+    description:
+      "Created from scratch, this media player allows you to listen to your favorite songs from the band Bring Me The Horizon. It features a sleek design and smooth functionality.",
+    link: "https://github.com/Santiagosba/portfolio",
+    github: "https://github.com/Santiagosba/portfolio",
+    image: "/projects/bmth_media_player.webp",
+    tags: ["HTML", "CSS", "JavaScript", "ReactJs"],
+  },
+];
+---
+
+<section class="grid md:grid-cols-2 gap-10 mt-12 px-4">
+  {PROJECTS.map(({ image, title, description, tags, link, github }) => (
+    <article
+      class="relative group bg-black/70 backdrop-blur-xl border border-white/20 rounded-[2.5rem] p-10 shadow-lg hover:shadow-xl transition-all duration-500 ease-out hover:-translate-y-1 w-full max-w-4xl mx-auto animate-fade-in-up overflow-hidden"
+    >
+      <!-- ✨ Partículas flotantes -->
+      <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div
+          class="absolute top-[-40px] left-[-40px] w-72 h-72 bg-cyan-300/30 border border-white/5 rounded-full blur-[120px] animate-bubble-fast"
+        ></div>
+        <div
+          class="absolute bottom-[-60px] right-[-60px] w-60 h-60 bg-fuchsia-300/30 border border-white/5 rounded-full blur-[100px] animate-bubble-fast delay-[3s]"
+        ></div>
+      </div>
+
+      <!-- Imagen del proyecto -->
+      <img
+        class="rounded-xl mb-6 border border-white/20 shadow-md transition-transform duration-300 group-hover:scale-[1.05]"
+        src={image}
+        alt={`Captura de pantalla del proyecto ${title}`}
+      />
+
+      <!-- Título -->
+      <h3
+        class="text-white text-3xl font-semibold mb-3 drop-shadow-[0_2px_6px_rgba(173,216,230,0.6)]"
+      >
+        {title}
+      </h3>
+
+      <!-- Descripción -->
+      <p class="text-gray-300 mb-6 text-lg leading-relaxed">{description}</p>
+
+      <!-- Tags -->
+      <ul class="flex flex-wrap gap-3 mb-6">
+        {tags.map((tag) => (
+          <li
+            class="bg-blue-200/15 text-blue-100 px-4 py-2 rounded-full text-sm border border-blue-100/20 backdrop-blur-md hover:scale-105 transition-transform duration-200"
+          >
+            {tag}
+          </li>
+        ))}
+      </ul>
+
+      <!-- Botones de links -->
+      <div class="flex gap-4">
+        {link && (
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="frutiger-button"
+          >
+            Ver proyecto
+          </a>
+        )}
+        {github && (
+          <a
+            href={github}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="frutiger-button"
+          >
+            Código fuente
+          </a>
+        )}
+      </div>
+    </article>
+  ))}
+</section>
+
+<style is:global>
+@keyframes bubble-fast {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-40px) scale(1.1);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+
+.animate-bubble-fast {
+  animation: bubble-fast 10s ease-in-out infinite;
+}
+.delay-\[3s\] {
+  animation-delay: 3s;
+}
+
+/* Animación fade-in-up */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease forwards;
+}
+
+.frutiger-button {
+  background: transparent;
+  border-radius: 1.25rem;
+  padding: 0.75rem 2rem;
+  font-weight: 600;
+  color: #aa9cff;
+  border: 1.5px solid rgba(170 156 255 / 0.5);
+  box-shadow:
+    inset 0 0 8px rgba(170 156 255 / 0.3);
+  backdrop-filter: blur(8px);
+  transition: all 0.4s ease;
+  user-select: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frutiger-button:hover {
+  color: #d3ccff;
+  border-color: rgba(170 156 255 / 0.9);
+  box-shadow:
+    0 0 18px rgba(170 156 255 / 0.9),
+    inset 0 0 12px rgba(170 156 255 / 0.8);
+  transform: scale(1.05);
+}
+
+/* Asegura la transición suave */
+
+a.frutiger-button {
+  text-decoration: none;
+}
+</style>

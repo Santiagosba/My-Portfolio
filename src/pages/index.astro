@@ -10,6 +10,8 @@ import Mailicon from "../components/icons/Mailicon.astro";
 import Experience from "../components/Experience.astro";
 import SectionConteiner from "../components/SectionConteiner.astro";
 import BriefcaseIcon from "../components/icons/BriefcaseIcon.astro";
+import CodeIcon from "../components/icons/CodeIcon.astro";
+import Projects from "../components/Projects.astro";
 ---
 
 <Layout
@@ -17,7 +19,7 @@ import BriefcaseIcon from "../components/icons/BriefcaseIcon.astro";
   description="Contrata a Santiago para crear tu aplicación Web. Desarrollador Web y de Contenido. Especializado en crear webs unicas"
 >
   <main>
-    <SectionConteiner class="py-44 pb-24">
+    <SectionConteiner id="Home" class="py-44 pb-24 ">
       <img
         class="rounded-full w-50 h-40 ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
     mb-12 animate-fade-in tracking-wide"
@@ -25,6 +27,7 @@ import BriefcaseIcon from "../components/icons/BriefcaseIcon.astro";
         alt="Santydev photo"
       />
       <h1
+        id="About"
         class="ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
     mb-12 animate-fade-in tracking-wide"
       >
@@ -42,7 +45,9 @@ import BriefcaseIcon from "../components/icons/BriefcaseIcon.astro";
         class="ml-3 text-4xl md:text-2xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
     mb-12 animate-fade-in tracking-wide"
       >
-        <span>More of two years of experience.</span><span class="text-blue-300">
+        <span>More of two years of experience.</span><span
+          class="text-blue-300"
+        >
           Web Developer and Content Creator.</span
         > Based in
         <span class="text-red-300"
@@ -57,7 +62,7 @@ import BriefcaseIcon from "../components/icons/BriefcaseIcon.astro";
         >
       </h2>
 
-      <nav class="mt-10 animate-fade-in tracking-wide">
+      <nav class="mt-10 animate-fade-in tracking-wide flex flex-wrap gap-4">
         <SocialPill
           href="https://es.linkedin.com/in/santiagosba"
           label="LinkedIn"
@@ -94,11 +99,31 @@ import BriefcaseIcon from "../components/icons/BriefcaseIcon.astro";
         class="mt-28 ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
     mb-12 animate-fade-in tracking-wide flex items-center gap-2"
       >
-        <BriefcaseIcon class="w-10 h-10" />
+        <BriefcaseIcon
+          class="w-10 h-10 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]"
+        />
         Experience
       </h2>
 
       <Experience />
+    </SectionConteiner>
+
+    <SectionConteiner id="Projects">
+      <h2
+        class="mt-28 ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
+    mb-12 animate-fade-in tracking-wide flex items-center gap-2"
+      >
+        <CodeIcon
+          class="w-12 h-12 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]"
+        />
+        Projects
+      </h2>
+      <p class="mt-14 ml-3 text-3xl md:text-3xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
+    mb-12 animate-fade-in tracking-wide flex items-center gap-2">
+        Here are some of my most notable projects, where I have applied my
+        skills in web development and programming.
+        <Projects />
+      </p>
     </SectionConteiner>
   </main>
 </Layout>
