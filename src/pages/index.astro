@@ -38,7 +38,7 @@ import Projects from "../components/Projects.astro";
           rel="noopener"
           class="w-full overflow-x-auto whitespace-nowrap relative -top-1.5 ml-2 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)] animate-fade-in tracking-wide"
         >
-          <Badge>Open to work</Badge>
+          <Badge>Open to work</Badge> 
         </a>
       </h1>
       <h2
@@ -118,12 +118,15 @@ import Projects from "../components/Projects.astro";
         />
         Projects
       </h2>
-      <p class="mt-14 ml-3 text-3xl md:text-3xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
-    mb-12 animate-fade-in tracking-wide flex items-center gap-2">
-        Here are some of my most notable projects, where I have applied my
-        skills in web development and programming.
-        <Projects />
-      </p>
+     <div class="mt-14 ml-3 max-w-5xl mx-auto">
+  <p class="text-3xl md:text-3xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
+      mb-12 animate-fade-in tracking-wide">
+    Here are some of my most notable projects, where I have applied my
+    skills in web development and programming.
+  </p>
+  <Projects />
+</div>
+
     </SectionConteiner>
   </main>
 </Layout>

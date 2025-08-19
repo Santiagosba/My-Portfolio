@@ -1,4 +1,64 @@
 ---
+import ReactIcon from "./icons/ReactIcon.astro";
+import HtmlIcon from "./icons/HTMLIcon.astro";
+import CSSIcon from "./icons/CSSIcon.astro";
+import JavascriptIcon from "./icons/JavascriptIcon.astro";
+import ViteIcon from "./icons/ViteIcon.astro";
+import PHPIcon from "./icons/PHPIcon.astro";
+import MYSQLicon from "./icons/MYSQLicon.astro";
+import BootsTrapIcon from "./icons/BootsTrapIcon.astro";
+import TailwindIcon from "./icons/TAILWINDCSSicon.astro";
+
+const TAGS = {
+  REACT: {
+    name: "ReactJS",
+    color: "bg-blue-500",
+    icon: ReactIcon,
+  },
+  HTML: {
+    name: "HTML",
+    color: "bg-red-500",
+    icon: HtmlIcon,
+  },
+  CSS: {
+    name: "CSS",
+    color: "bg-blue-500",
+    icon: CSSIcon,
+  },
+  JAVASCRIPT: {
+    name: "JavaScript",
+    color: "bg-yellow-500",
+    icon: JavascriptIcon,
+  },
+  VITE: { 
+    name: "Vite",
+    color: "bg-green-500",
+    icon: ViteIcon,
+  },
+  TAILWIND: {
+    name: "Tailwind CSS",
+    color: "bg-purple-500",
+    icon: TailwindIcon,
+  },
+  PHP: {
+    name: "PHP",
+    color: "bg-red-500",
+    icon: PHPIcon,
+  },
+  MYSQL: {
+    name: "MySQL",
+    color: "bg-yellow-500",
+    icon: MYSQLicon,
+  },
+  BOOTSTRAP: {
+    name: "Bootstrap",
+    color: "bg-indigo-500",
+    icon: BootsTrapIcon,
+  },
+ 
+ 
+};
+
 const PROJECTS = [
   {
     title: "Bring Me The Horizon Media Player",
@@ -6,26 +66,80 @@ const PROJECTS = [
       "Created from scratch, this media player allows you to listen to your favorite songs from the band Bring Me The Horizon. It features a sleek design and smooth functionality.",
     link: "https://github.com/Santiagosba/portfolio",
     github: "https://github.com/Santiagosba/portfolio",
-    image: "/projects/bmth_media_player.webp",
-    tags: ["HTML", "CSS", "JavaScript", "ReactJs"],
+    image: "/projects/bmth_media_player.png",
+    tags: [ TAGS.HTML,TAGS.CSS,TAGS.JAVASCRIPT,TAGS.REACT,TAGS.VITE],
   },
+  {
+    title: "Pong Classic Game",
+    description:
+      "Created from scratch, this Pong game have realistic physics and smooth gameplay. It features a sleek design and smooth functionality. You can play it solo or with a friend in the classic two-player mode, with the old design.",
+    link: "https://github.com/Santiagosba/portfolio",
+    github: "https://github.com/Santiagosba/portfolio",
+    image: "/projects/pong_game.png",
+    tags: [TAGS.HTML,TAGS.CSS,TAGS.JAVASCRIPT],
+  },
+   {
+    title: "Rubik's Cube Solver",
+    description:
+      "Created from scratch, this Rubik's Cube solver uses advanced algorithms to help you solve the puzzle quickly and efficiently. It features a user-friendly interface and step-by-step instructions.",
+    link: "https://github.com/Santiagosba/portfolio",
+    github: "https://github.com/Santiagosba/portfolio",
+    image: "/projects/RubikCube.png",
+    tags: [TAGS.HTML, TAGS.CSS, TAGS.JAVASCRIPT, TAGS.REACT, TAGS.VITE],
+  },
+ 
+  {
+    title: "Digital World Clock",
+    description:
+      "Created from scratch, this digital clock features a military design and allows you to keep track of time in a unique way. It includes various functionalities such as format selection, current date and time display of all time zones.",
+    link: "https://github.com/Santiagosba/portfolio",
+    github: "https://github.com/Santiagosba/portfolio",
+    image: "/projects/Digital World Clock.png",
+    tags: [TAGS.HTML,TAGS.CSS,TAGS.JAVASCRIPT],
+  },
+  {
+    title: "Hangman Game",
+    description:
+      "This Hangman game includes various functionalities such as word selection, difficulty levels, and a fun design. You can play solo or with a friend in the classic two-player mode.",
+    link: "https://github.com/Santiagosba/portfolio",
+    github: "https://github.com/Santiagosba/portfolio",
+    image: "/projects/hangman.png",
+    tags: [TAGS.HTML, TAGS.CSS, TAGS.JAVASCRIPT, TAGS.REACT, TAGS.VITE],
+  },
+   {
+    title: "PHP CRUD App Blog",
+    description:
+      "This blog allows users to create, read, update, and delete posts. You can be admin or user , you can comment and like post like a real social network.",
+    link: "https://github.com/Santiagosba/portfolio",
+    github: "https://github.com/Santiagosba/portfolio",
+    image: "/projects/blog.png",
+    tags: [TAGS.HTML, TAGS.CSS, TAGS.JAVASCRIPT, TAGS.PHP, TAGS.MYSQL, TAGS.BOOTSTRAP],
+  }
+ 
 ];
 ---
 
-<section class="grid md:grid-cols-2 gap-10 mt-12 px-4">
+<section class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10 mt-12 mr-1">
   {PROJECTS.map(({ image, title, description, tags, link, github }) => (
     <article
       class="relative group bg-black/70 backdrop-blur-xl border border-white/20 rounded-[2.5rem] p-10 shadow-lg hover:shadow-xl transition-all duration-500 ease-out hover:-translate-y-1 w-full max-w-4xl mx-auto animate-fade-in-up overflow-hidden"
     >
-      <!-- ✨ Partículas flotantes -->
-      <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div
-          class="absolute top-[-40px] left-[-40px] w-72 h-72 bg-cyan-300/30 border border-white/5 rounded-full blur-[120px] animate-bubble-fast"
-        ></div>
-        <div
-          class="absolute bottom-[-60px] right-[-60px] w-60 h-60 bg-fuchsia-300/30 border border-white/5 rounded-full blur-[100px] animate-bubble-fast delay-[3s]"
-        ></div>
-      </div>
+    
+     <!-- ✨ Partículas flotantes dinámicas -->
+<div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+  <div class="particle w-72 h-72 bg-cyan-300/30 border border-white/5 rounded-full blur-[120px] animate-bubble-fast"></div>
+  <div class="particle w-60 h-60 bg-fuchsia-300/30 border border-white/5 rounded-full blur-[100px] animate-bubble-fast delay-[2s]"></div>
+  <div class="particle w-48 h-48 bg-yellow-300/30 rounded-full blur-[90px] animate-bubble-slower delay-[1s]"></div>
+  <div class="particle w-32 h-32 bg-pink-300/30 rounded-full blur-[70px] animate-bubble-fast delay-[3s]"></div>
+  <div class="particle w-56 h-56 bg-green-300/30 rounded-full blur-[110px] animate-bubble-slower delay-[4s]"></div>
+  <div class="particle w-40 h-40 bg-orange-300/30 rounded-full blur-[80px] animate-bubble-fast delay-[5s]"></div>
+  <div class="particle w-64 h-64 bg-purple-300/30 rounded-full blur-[130px] animate-bubble-slower delay-[6s]"></div>
+  <div class="particle w-36 h-36 bg-teal-300/30 rounded-full blur-[75px] animate-bubble-fast delay-[7s]"></div>
+  <div class="particle w-50 h-50 bg-indigo-300/30 rounded-full blur-[100px] animate-bubble-slower delay-[8s]"></div>
+  <div class="particle w-28 h-28 bg-rose-300/30 rounded-full blur-[60px] animate-bubble-fast delay-[9s]"></div>
+</div>
+
+
 
       <!-- Imagen del proyecto -->
       <img
@@ -45,15 +159,20 @@ const PROJECTS = [
       <p class="text-gray-300 mb-6 text-lg leading-relaxed">{description}</p>
 
       <!-- Tags -->
-      <ul class="flex flex-wrap gap-3 mb-6">
-        {tags.map((tag) => (
-          <li
-            class="bg-blue-200/15 text-blue-100 px-4 py-2 rounded-full text-sm border border-blue-100/20 backdrop-blur-md hover:scale-105 transition-transform duration-200"
-          >
-            {tag}
-          </li>
-        ))}
-      </ul>
+   <ul class="flex flex-wrap gap-3 mb-6">
+  {tags.map((tag) => {
+    const Icon = tag.icon; // guardamos el componente en mayúscula
+    return (
+      <li
+        class="bg-blue-200/15 text-blue-100 px-4 py-2 rounded-full text-sm border border-blue-100/20 backdrop-blur-md hover:scale-105 transition-transform duration-200 flex items-center gap-2"
+      >
+        <tag.icon class="w-5 h-5" />
+        {tag.name}
+      </li>
+    );
+  })}
+</ul>
+
 
       <!-- Botones de links -->
       <div class="flex gap-4">
@@ -96,7 +215,15 @@ const PROJECTS = [
 }
 
 .animate-bubble-fast {
-  animation: bubble-fast 10s ease-in-out infinite;
+  animation: bubble-fast 6s ease-in-out infinite;
+}
+
+@keyframes bubble-fast {
+  0% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.05); }
+  50% { transform: translate(-20px, -60px) scale(1.1); }
+  75% { transform: translate(40px, -30px) scale(1.05); }
+  100% { transform: translate(0, 0) scale(1); }
 }
 .delay-\[3s\] {
   animation-delay: 3s;
@@ -149,4 +276,43 @@ const PROJECTS = [
 a.frutiger-button {
   text-decoration: none;
 }
+</style>
+
+
+<style>
+@keyframes bubble-fast {
+  0% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(30px, -40px) scale(1.05); }
+  50% { transform: translate(-20px, -60px) scale(1.1); }
+  75% { transform: translate(40px, -30px) scale(1.05); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes bubble-slower {
+  0% { transform: translate(0, 0) scale(1); }
+  25% { transform: translate(-30px, 20px) scale(1.02); }
+  50% { transform: translate(20px, -30px) scale(1.05); }
+  75% { transform: translate(-25px, 25px) scale(1.02); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* Animaciones */
+.animate-bubble-fast {
+  animation: bubble-fast 8s ease-in-out infinite;
+}
+
+.animate-bubble-slower {
+  animation: bubble-slower 12s ease-in-out infinite;
+}
+
+/* Delays dinámicos para cada burbuja */
+.delay-[1s] { animation-delay: 1s; }
+.delay-[2s] { animation-delay: 2s; }
+.delay-[3s] { animation-delay: 3s; }
+.delay-[4s] { animation-delay: 4s; }
+.delay-[5s] { animation-delay: 5s; }
+.delay-[6s] { animation-delay: 6s; }
+.delay-[7s] { animation-delay: 7s; }
+.delay-[8s] { animation-delay: 8s; }
+.delay-[9s] { animation-delay: 9s; }
 </style>

@@ -37,10 +37,13 @@ const { description, title } = Astro.props;
     <!-- Layout principal -->
     <Header class="relative z-10 bg-transparent" />
 
-    <main class="relative flex-grow z-0 mt-20 px-4">
-      <slot />
-      <Footer />
-    </main>
+   <main class="relative flex-grow z-0 mt-20 px-4">
+  <div class="max-w-7xl w-full mx-auto">
+    <slot />
+  </div>
+  <Footer />
+</main>
+
 
     <!-- 🎇 Script inline para estrellas y estrellas fugaces -->
     <script is:inline>
