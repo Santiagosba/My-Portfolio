@@ -1,53 +1,41 @@
 <header
-  class=" animate-fade-in tracking-wide group flex justify-center items-center py-3 max-w-[1120px] mx-auto px-6 relative z-10
-        bg-white/10 backdrop-blur-md border border-white/20 rounded-full
-          shadow-inner shadow-white/10 text-white overflow-hidden mt-5"
+  class="animate-fade-in tracking-wide group flex justify-center items-center py-3 max-w-[1120px] mx-auto px-4 sm:px-6 relative z-10
+         bg-white/10 backdrop-blur-md border border-white/20 rounded-full
+         shadow-inner shadow-white/10 text-white overflow-hidden mt-5"
 >
   <div class="relative flex justify-center items-center w-full">
-    <nav class="flex flex-row gap-x-10 opacity-90 text-white relative z-20 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]">
-      <a
-        href="#Home"
-        class="relative hover:text-purple-300 hover:drop-shadow-[0_0_15px_rgba(187,128,252,0.9)] transition duration-300 ease-in-out"
-        onmouseenter="document.querySelector('.glass-reflect').classList.add('opacity-70')"
-        onmouseleave="document.querySelector('.glass-reflect').classList.remove('opacity-70')"
-        >Home</a
-      >
-      <a
-        href="#About"
-        class="relative hover:text-purple-300 hover:drop-shadow-[0_0_15px_rgba(187,128,252,0.9)] transition duration-300 ease-in-out"
-        onmouseenter="document.querySelector('.glass-reflect').classList.add('opacity-70')"
-        onmouseleave="document.querySelector('.glass-reflect').classList.remove('opacity-70')"
-        >About</a
-      >
-        <a
-        href="#Experience"
-        class="relative hover:text-purple-300 hover:drop-shadow-[0_0_15px_rgba(187,128,252,0.9)] transition duration-300 ease-in-out"
-        onmouseenter="document.querySelector('.glass-reflect').classList.add('opacity-70')"
-        onmouseleave="document.querySelector('.glass-reflect').classList.remove('opacity-70')"
-        >Experience</a
-      >
-      <a
-        href="#Projects"
-        class="relative hover:text-purple-300 hover:drop-shadow-[0_0_15px_rgba(187,128,252,0.9)] transition duration-300 ease-in-out"
-        onmouseenter="document.querySelector('.glass-reflect').classList.add('opacity-70')"
-        onmouseleave="document.querySelector('.glass-reflect').classList.remove('opacity-70')"
-        >Projects</a
-      >
-      <a
-        href="mailto:santiagosba888@gmail.com"
-        class="relative hover:text-purple-300 hover:drop-shadow-[0_0_15px_rgba(187,128,252,0.9)] transition duration-300 ease-in-out"
-        onmouseenter="document.querySelector('.glass-reflect').classList.add('opacity-70')"
-        onmouseleave="document.querySelector('.glass-reflect').classList.remove('opacity-70')"
-        >Contact</a
-      >
+    <nav class="flex flex-row flex-wrap gap-x-4 sm:gap-x-10 gap-y-2 opacity-90 text-white relative z-20 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]">
+      <a href="#Home"
+         class="relative hover:text-purple-300 hover:drop-shadow-[0_0_15px_rgba(187,128,252,0.9)] transition duration-300 ease-in-out"
+         onmouseenter="document.querySelector('.glass-reflect').classList.add('opacity-70')"
+         onmouseleave="document.querySelector('.glass-reflect').classList.remove('opacity-70')"
+      >Home</a>
+      <a href="#About"
+         class="relative hover:text-purple-300 hover:drop-shadow-[0_0_15px_rgba(187,128,252,0.9)] transition duration-300 ease-in-out"
+         onmouseenter="document.querySelector('.glass-reflect').classList.add('opacity-70')"
+         onmouseleave="document.querySelector('.glass-reflect').classList.remove('opacity-70')"
+      >About</a>
+      <a href="#Experience"
+         class="relative hover:text-purple-300 hover:drop-shadow-[0_0_15px_rgba(187,128,252,0.9)] transition duration-300 ease-in-out"
+         onmouseenter="document.querySelector('.glass-reflect').classList.add('opacity-70')"
+         onmouseleave="document.querySelector('.glass-reflect').classList.remove('opacity-70')"
+      >Experience</a>
+      <a href="#Projects"
+         class="relative hover:text-purple-300 hover:drop-shadow-[0_0_15px_rgba(187,128,252,0.9)] transition duration-300 ease-in-out"
+         onmouseenter="document.querySelector('.glass-reflect').classList.add('opacity-70')"
+         onmouseleave="document.querySelector('.glass-reflect').classList.remove('opacity-70')"
+      >Projects</a>
+      <a href="mailto:santiagosba888@gmail.com"
+         class="relative hover:text-purple-300 hover:drop-shadow-[0_0_15px_rgba(187,128,252,0.9)] transition duration-300 ease-in-out"
+         onmouseenter="document.querySelector('.glass-reflect').classList.add('opacity-70')"
+         onmouseleave="document.querySelector('.glass-reflect').classList.remove('opacity-70')"
+      >Contact</a>
     </nav>
 
-    <!-- Reflejo animado morado -->
     <div
       class="glass-reflect absolute top-0 left-[-50%] w-[200%] h-full pointer-events-none
-            bg-gradient-to-r from-transparent via-purple-400/40 to-transparent
-            blur-xl opacity-25 transition-opacity duration-300 ease-in-out"
-    >
-    </div>
+             bg-gradient-to-r from-transparent via-purple-400/40 to-transparent
+             blur-xl opacity-25 transition-opacity duration-300 ease-in-out"
+    ></div>
   </div>
 </header>
