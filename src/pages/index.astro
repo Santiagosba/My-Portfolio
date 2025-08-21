@@ -16,57 +16,44 @@ import Projects from "../components/Projects.astro";
 
 <Layout
   title="Portfolio de Santiago Benítez Álvarez - Desarrollador y Programador web"
-  description="Contrata a Santiago para crear tu aplicación Web. Desarrollador Web y de Contenido. Especializado en crear webs unicas"
+  description="Contrata a Santiago para crear tu aplicación Web. Desarrollador Web y de Contenido. Especializado en crear webs únicas"
 >
   <main>
-    <SectionConteiner id="Home" class="py-44 pb-24 ">
+    <SectionConteiner id="Home" class="py-24 md:py-44">
       <img
-        class="rounded-full w-50 h-40 ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
-    mb-12 animate-fade-in tracking-wide"
+        class="rounded-full w-36 h-36 sm:w-48 sm:h-48 md:w-52 md:h-52 mx-auto mb-8 animate-fade-in drop-shadow-lg"
         src="/Santydev_photo/_DSC7034.JPG"
         alt="Santydev photo"
       />
-      <h1
-        
-        class="ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
-    mb-12 animate-fade-in tracking-wide"
-      >
+      <h1 class="text-2xl sm:text-3xl md:text-5xl font-semibold text-white text-center drop-shadow-lg mb-4 animate-fade-in tracking-wide">
         Hey, I'm Santiago Benítez Álvarez
+      </h1>
+      <div class="text-center mb-6">
         <a
           href="https://es.linkedin.com/in/santiagosba"
           target="_blank"
           rel="noopener"
-          class="w-full overflow-x-auto whitespace-nowrap relative -top-1.5 ml-2 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)] animate-fade-in tracking-wide"
         >
-          <Badge>Open to work</Badge> 
+          <Badge>Open to work</Badge>
         </a>
-      </h1>
-      <h2
-        class="ml-3 text-4xl md:text-2xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
-    mb-12 animate-fade-in tracking-wide"
-      >
-        <span>More of two years of experience.</span><span
-          class="text-blue-300"
-        >
-          Web Developer and Content Creator.</span
-        > Based in
-        <span class="text-red-300"
-          >Barcelona, España <img
+      </div>
+      <h2 class="text-base sm:text-lg md:text-2xl text-white text-center drop-shadow-lg mb-8 animate-fade-in tracking-wide">
+        <span>More than two years of experience.</span>
+        <span class="text-blue-300"> Web Developer and Content Creator.</span>
+        Based in
+        <span class="text-red-300">
+          Barcelona, España
+          <img
             src="https://flagcdn.com/es.svg"
             alt="🇪🇸"
-            class="inline w-8 h-5 align-middle"
-          /></span
-        >
-        . <span class="opacity-80"
-          >Specialized in creating unique applications.</span
-        >
+            class="inline w-5 h-3 align-middle ml-1"
+          />
+        </span>
+        . <span class="opacity-80">Specialized in creating unique applications.</span>
       </h2>
 
-      <nav class="mt-10 animate-fade-in tracking-wide flex flex-wrap gap-4">
-        <SocialPill
-          href="https://es.linkedin.com/in/santiagosba"
-          label="LinkedIn"
-        >
+      <nav class="flex flex-wrap justify-center gap-4 animate-fade-in">
+        <SocialPill href="https://es.linkedin.com/in/santiagosba" label="LinkedIn">
           <LinkedinIcon class="w-5 h-5 icon-glow" />
         </SocialPill>
 
@@ -74,59 +61,31 @@ import Projects from "../components/Projects.astro";
           <GitHubIcon class="w-5 h-5 icon-glow" />
         </SocialPill>
 
-        <!--Instagram y x ocultos de momento ya que no son todavía de trabajo-->
-        <!-- <SocialPill
-          href="https://www.instagram.com/tuusuario"
-          label="Instagram"
-        >
-          <InstagramIcon class="w-5 h-5 icon-glow" />
-        </SocialPill>
-
-        <SocialPill href="https://x.com/tuusuario">
-          <XIcon class="w-5 h-5 icon-glow" />
-        </SocialPill> -->
-
         <SocialPill href="mailto:santiagosba888@gmail.com" label="Email">
           <Mailicon class="w-5 h-5 icon-glow" />
         </SocialPill>
-
-        <a href="https://github.com/Santiagosba"> </a>
       </nav>
     </SectionConteiner>
 
     <SectionConteiner id="Experience" class="min-h-screen">
-      <h2
-        class="mt-28 ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
-    mb-12 animate-fade-in tracking-wide flex items-center gap-2"
-      >
-        <BriefcaseIcon
-          class="w-10 h-10 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]"
-        />
+      <h2 class="mt-16 md:mt-28 text-2xl sm:text-3xl md:text-5xl font-semibold text-white drop-shadow-lg mb-8 flex items-center justify-center gap-2 animate-fade-in">
+        <BriefcaseIcon class="w-6 sm:w-8 md:w-10 h-6 sm:h-8 md:h-10 drop-shadow-lg" />
         Experience
       </h2>
-
       <Experience />
     </SectionConteiner>
 
     <SectionConteiner id="Projects">
-      <h2
-        class="mt-28 ml-3 text-4xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
-    mb-12 animate-fade-in tracking-wide flex items-center gap-2"
-      >
-        <CodeIcon
-          class="w-12 h-12 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]"
-        />
+      <h2 class="mt-16 md:mt-28 text-2xl sm:text-3xl md:text-5xl font-semibold text-white drop-shadow-lg mb-8 flex items-center justify-center gap-2 animate-fade-in">
+        <CodeIcon class="w-8 sm:w-10 md:w-12 h-8 sm:h-10 md:h-12 drop-shadow-lg" />
         Projects
       </h2>
-     <div class="mt-14 ml-3 max-w-5xl mx-auto">
-  <p class="text-3xl md:text-3xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]
-      mb-12 animate-fade-in tracking-wide">
-    Here are some of my most notable projects, where I have applied my
-    skills in web development and programming.
-  </p>
-  <Projects />
-</div>
-
+      <div class="px-4 sm:px-6 md:px-0 max-w-5xl mx-auto">
+        <p class="text-base sm:text-lg md:text-2xl text-white drop-shadow-lg mb-8 text-center animate-fade-in">
+          Here are some of my most notable projects, where I have applied my skills in web development and programming.
+        </p>
+        <Projects />
+      </div>
     </SectionConteiner>
   </main>
 </Layout>
