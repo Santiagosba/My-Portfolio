@@ -166,6 +166,21 @@
   z-index: -1;
 }
 
+@media (max-width: 640px) {
+  .space-background {
+    width: 100%;
+    height: 100%;
+    background-size: cover; /* evita 200% */
+  }
+
+  .space-background::before {
+    width: 100%;
+    height: 100%;
+    background-size: 150px 150px; /* estrellas más densas en móvil */
+  }
+}
+
+
 /* Estrellas dispersas */
 .space-background::before {
   content: "";
