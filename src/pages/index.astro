@@ -16,13 +16,14 @@ import Projects from "../components/Projects.astro";
 
 <Layout
   title="Portfolio de Santiago Benítez Álvarez - Desarrollador y Programador web"
-  description="Contrata a Santiago para crear tu aplicación Web. Desarrollador Web y de Contenido. Especializado en crear webs unicas"
+  description="Contrata a Santiago para crear tu aplicación Web. Desarrollador Web y de Contenido. Especializado en crear webs únicas"
 >
   <main>
+    {/* HOME / ABOUT */}
     <SectionConteiner id="Home" class="py-20 md:py-44 px-4 md:px-0">
-      <div class="flex flex-col items-center text-center">
+      <div class="flex flex-col items-start text-left max-w-5xl mx-auto">
         <img
-          class="rounded-full w-36 h-36 md:w-50 md:h-40 mb-8 animate-fade-in"
+          class="rounded-full w-36 h-36 md:w-40 md:h-40 mb-8 animate-fade-in"
           src="/Santydev_photo/_DSC7034.JPG"
           alt="Santydev photo"
         />
@@ -38,14 +39,14 @@ import Projects from "../components/Projects.astro";
           </a>
         </h1>
         <h2 class="text-lg md:text-2xl text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)] mb-8 animate-fade-in">
-          <span>More of two years of experience.</span>
+          <span>More than two years of experience.</span>
           <span class="text-blue-300"> Web Developer and Content Creator.</span>
           <br />
           Based in <span class="text-red-300">Barcelona, España <img src="https://flagcdn.com/es.svg" alt="🇪🇸" class="inline w-6 h-4 align-middle" /></span>.
           <span class="opacity-80"> Specialized in creating unique applications.</span>
         </h2>
 
-        <nav class="flex flex-wrap justify-center gap-4 mt-6 animate-fade-in">
+        <nav class="flex flex-wrap justify-start gap-4 mt-6 animate-fade-in">
           <SocialPill href="https://es.linkedin.com/in/santiagosba" label="LinkedIn">
             <LinkedinIcon class="w-5 h-5 icon-glow" />
           </SocialPill>
@@ -59,6 +60,7 @@ import Projects from "../components/Projects.astro";
       </div>
     </SectionConteiner>
 
+    {/* EXPERIENCE */}
     <SectionConteiner id="Experience" class="min-h-screen px-4 md:px-0">
       <h2 class="mt-16 md:mt-28 text-3xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)] mb-12 flex items-center gap-2 animate-fade-in justify-center md:justify-start">
         <BriefcaseIcon class="w-10 h-10 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]" />
@@ -67,17 +69,37 @@ import Projects from "../components/Projects.astro";
       <Experience />
     </SectionConteiner>
 
+    {/* PROJECTS */}
     <SectionConteiner id="Projects" class="px-4 md:px-0">
       <h2 class="mt-16 md:mt-28 text-3xl md:text-5xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)] mb-12 flex items-center gap-2 animate-fade-in justify-center md:justify-start">
         <CodeIcon class="w-12 h-12 drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]" />
         Projects
       </h2>
-      <div class="mt-8 md:mt-14 max-w-5xl mx-auto text-center md:text-left">
+      <div class="mt-8 md:mt-14 max-w-5xl mx-auto text-left">
         <p class="text-xl md:text-3xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)] mb-8 animate-fade-in">
           Here are some of my most notable projects, where I have applied my skills in web development and programming.
         </p>
-        <Projects />
+        {/* Lazy-load proyectos para mejorar performance */}
+        <Projects client:load />
       </div>
     </SectionConteiner>
+
+    {/* FOOTER */}
+    <footer class="bg-gray-900 text-white py-10 px-4 md:px-0 flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between gap-4">
+      <div class="text-center md:text-left">
+        <p>© 2025 Santiago Benítez Álvarez. All rights reserved.</p>
+      </div>
+      <nav class="flex gap-4 justify-center md:justify-end">
+        <SocialPill href="https://es.linkedin.com/in/santiagosba" label="LinkedIn">
+          <LinkedinIcon class="w-5 h-5 icon-glow" />
+        </SocialPill>
+        <SocialPill href="https://github.com/Santiagosba" label="GitHub">
+          <GitHubIcon class="w-5 h-5 icon-glow" />
+        </SocialPill>
+        <SocialPill href="mailto:santiagosba888@gmail.com" label="Email">
+          <Mailicon class="w-5 h-5 icon-glow" />
+        </SocialPill>
+      </nav>
+    </footer>
   </main>
 </Layout>
