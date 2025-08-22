@@ -8,311 +8,182 @@ import PHPIcon from "./icons/PHPIcon.astro";
 import MYSQLicon from "./icons/MYSQLicon.astro";
 import BootsTrapIcon from "./icons/BootsTrapIcon.astro";
 import TailwindIcon from "./icons/TAILWINDCSSicon.astro";
-
-const TAGS = {
-  REACT: {
-    name: "ReactJS",
-    color: "bg-blue-500",
-    icon: ReactIcon,
-  },
-  HTML: {
-    name: "HTML",
-    color: "bg-red-500",
-    icon: HtmlIcon,
-  },
-  CSS: {
-    name: "CSS",
-    color: "bg-blue-500",
-    icon: CSSIcon,
-  },
-  JAVASCRIPT: {
-    name: "JavaScript",
-    color: "bg-yellow-500",
-    icon: JavascriptIcon,
-  },
-  VITE: { 
-    name: "Vite",
-    color: "bg-green-500",
-    icon: ViteIcon,
-  },
-  TAILWIND: {
-    name: "Tailwind CSS",
-    color: "bg-purple-500",
-    icon: TailwindIcon,
-  },
-  PHP: {
-    name: "PHP",
-    color: "bg-red-500",
-    icon: PHPIcon,
-  },
-  MYSQL: {
-    name: "MySQL",
-    color: "bg-yellow-500",
-    icon: MYSQLicon,
-  },
-  BOOTSTRAP: {
-    name: "Bootstrap",
-    color: "bg-indigo-500",
-    icon: BootsTrapIcon,
-  },
- 
- 
-};
-
-const PROJECTS = [
-  {
-    title: "Bring Me The Horizon Media Player",
-    description:
-      "Created from scratch, this media player allows you to listen to your favorite songs from the band Bring Me The Horizon. It features a sleek design and smooth functionality.",
-    link: "https://github.com/Santiagosba/portfolio",
-    github: "https://github.com/Santiagosba/portfolio",
-    image: "/projects/bmth_media_player.webp",
-    tags: [ TAGS.HTML,TAGS.CSS,TAGS.JAVASCRIPT,TAGS.REACT,TAGS.VITE],
-  },
-  {
-    title: "Pong Classic Game",
-    description:
-      "Created from scratch, this Pong game have realistic physics and smooth gameplay. It features a sleek design and smooth functionality. You can play it solo or with a friend in the classic two-player mode, with the old design.",
-    link: "https://github.com/Santiagosba/portfolio",
-    github: "https://github.com/Santiagosba/portfolio",
-    image: "/projects/pong_game.webp",
-    tags: [TAGS.HTML,TAGS.CSS,TAGS.JAVASCRIPT],
-  },
-   {
-    title: "Rubik's Cube Solver",
-    description:
-      "Created from scratch, this Rubik's Cube solver uses advanced algorithms to help you solve the puzzle quickly and efficiently. It features a user-friendly interface and step-by-step instructions.",
-    link: "https://github.com/Santiagosba/portfolio",
-    github: "https://github.com/Santiagosba/portfolio",
-    image: "/projects/RubikCube.webp",
-    tags: [TAGS.HTML, TAGS.CSS, TAGS.JAVASCRIPT, TAGS.REACT, TAGS.VITE],
-  },
- 
-  {
-    title: "Digital World Clock",
-    description:
-      "Created from scratch, this digital clock features a military design and allows you to keep track of time in a unique way. It includes various functionalities such as format selection, current date and time display of all time zones.",
-    link: "https://github.com/Santiagosba/portfolio",
-    github: "https://github.com/Santiagosba/portfolio",
-    image: "/projects/Digital World Clock.webp",
-    tags: [TAGS.HTML,TAGS.CSS,TAGS.JAVASCRIPT],
-  },
-  {
-    title: "Hangman Game",
-    description:
-      "This Hangman game includes various functionalities such as word selection, difficulty levels, and a fun design. You can play solo or with a friend in the classic two-player mode.",
-    link: "https://github.com/Santiagosba/portfolio",
-    github: "https://github.com/Santiagosba/portfolio",
-    image: "/projects/hangman.webp",
-    tags: [TAGS.HTML, TAGS.CSS, TAGS.JAVASCRIPT, TAGS.REACT, TAGS.VITE],
-  },
-   {
-    title: "PHP CRUD App Blog",
-    description:
-      "This blog allows users to create, read, update, and delete posts. You can be admin or user , you can comment and like post like a real social network.",
-    link: "https://github.com/Santiagosba/portfolio",
-    github: "https://github.com/Santiagosba/portfolio",
-    image: "/projects/blog.webp",
-    tags: [TAGS.HTML, TAGS.CSS, TAGS.JAVASCRIPT, TAGS.PHP, TAGS.MYSQL, TAGS.BOOTSTRAP],
-  }
- 
-];
 ---
 
-<section class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-10 mt-12 mr-1">
-  {PROJECTS.map(({ image, title, description, tags, link, github }) => (
-    <article
-      class="relative group bg-black/70 backdrop-blur-xl border border-white/20 rounded-[2.5rem] p-10 shadow-lg hover:shadow-xl transition-all duration-500 ease-out hover:-translate-y-1 w-full max-w-4xl mx-auto animate-fade-in-up overflow-hidden"
-    >
-    
-     <!-- ✨ Partículas flotantes dinámicas -->
-<div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-  <div class="particle w-72 h-72 bg-cyan-300/30 border border-white/5 rounded-full blur-[120px] animate-bubble-fast"></div>
-  <div class="particle w-60 h-60 bg-fuchsia-300/30 border border-white/5 rounded-full blur-[100px] animate-bubble-fast delay-[2s]"></div>
-  <div class="particle w-48 h-48 bg-yellow-300/30 rounded-full blur-[90px] animate-bubble-slower delay-[1s]"></div>
-  <div class="particle w-32 h-32 bg-pink-300/30 rounded-full blur-[70px] animate-bubble-fast delay-[3s]"></div>
-  <div class="particle w-56 h-56 bg-green-300/30 rounded-full blur-[110px] animate-bubble-slower delay-[4s]"></div>
-  <div class="particle w-40 h-40 bg-orange-300/30 rounded-full blur-[80px] animate-bubble-fast delay-[5s]"></div>
-  <div class="particle w-64 h-64 bg-purple-300/30 rounded-full blur-[130px] animate-bubble-slower delay-[6s]"></div>
-  <div class="particle w-36 h-36 bg-teal-300/30 rounded-full blur-[75px] animate-bubble-fast delay-[7s]"></div>
-  <div class="particle w-50 h-50 bg-indigo-300/30 rounded-full blur-[100px] animate-bubble-slower delay-[8s]"></div>
-  <div class="particle w-28 h-28 bg-rose-300/30 rounded-full blur-[60px] animate-bubble-fast delay-[9s]"></div>
+<div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
+  <!-- Proyecto -->
+  <article class="project-card from-orange-400/40 via-grey-400/30 to-black-500/40">
+    <img src="/projects/bmth_media_player.webp" alt="Music Player" class="project-img" loading="lazy" />
+    <h3 class="project-title">BMTH Music Player</h3>
+    <p class="project-desc">A custom music player to listen to Bring Me The Horizon.</p>
+    <div class="project-tags">
+      <ReactIcon class="w-7 h-7" />
+      <ViteIcon class="w-7 h-7" />
+      <TailwindIcon class="w-7 h-7" />
+    </div>
+    <div class="project-links">
+      <a href="https://github.com/tuusuario/music-player" target="_blank" class="btn">View Code</a>
+      <a href="https://music-demo.vercel.app" target="_blank" class="btn">View Project</a>
+    </div>
+  </article>
+
+  <!-- Proyecto -->
+  <article class="project-card from-indigo-400/40 via-green-500/30 to-red-500/40">
+    <img src="/projects/RubikCube.webp" alt="Rubik Cube 3D" class="project-img" loading="lazy" />
+    <h3 class="project-title">Rubik Cube 3D</h3>
+    <p class="project-desc">A 3D interactive Rubik’s Cube built with React and Three.js.</p>
+    <div class="project-tags">
+      <ReactIcon class="w-7 h-7" />
+      <ViteIcon class="w-7 h-7" />
+      <TailwindIcon class="w-7 h-7" />
+    </div>
+    <div class="project-links">
+      <a href="https://github.com/tuusuario/rubik-cube" target="_blank" class="btn">View Code</a>
+      <a href="https://rubik-demo.vercel.app" target="_blank" class="btn">View Project</a>
+    </div>
+  </article>
+
+  <!-- Proyecto -->
+  <article class="project-card from-lime-400/40 via-green-500/30 to-black-500/40">
+    <img src="/projects/pong_game.webp" alt="Classic Pong Game" class="project-img" loading="lazy" />
+    <h3 class="project-title">Classic Pong</h3>
+    <p class="project-desc">A classic Pong game recreated with physics and smooth animations.</p>
+    <div class="project-tags">
+      <HtmlIcon class="w-7 h-7" />
+      <CSSIcon class="w-7 h-7" />
+      <JavascriptIcon class="w-7 h-7" />
+    </div>
+    <div class="project-links">
+      <a href="https://github.com/tuusuario/pong" target="_blank" class="btn">View Code</a>
+      <a href="https://pong-demo.vercel.app" target="_blank" class="btn">View Project</a>
+    </div>
+  </article>
+
+  <!-- Proyecto -->
+  <article class="project-card from-green-400/40 via-lime-400/30 to-black-500/40">
+    <img src="/projects/Digital World Clock.webp" alt="World Clock" class="project-img" loading="lazy" />
+    <h3 class="project-title">World Clock</h3>
+    <p class="project-desc">An interactive world clock with military aesthetic and timezones.</p>
+    <div class="project-tags">
+      <HtmlIcon class="w-7 h-7" />
+      <CSSIcon class="w-7 h-7" />
+      <JavascriptIcon class="w-7 h-7" />
+    </div>
+    <div class="project-links">
+      <a href="https://github.com/tuusuario/world-clock" target="_blank" class="btn">View Code</a>
+      <a href="https://worldclock-demo.vercel.app" target="_blank" class="btn">View Project</a>
+    </div>
+  </article>
+
+  <!-- Proyecto -->
+  <article class="project-card from-pink-400/40 via-gray-500/30 to-indigo-500/40">
+    <img src="/projects/blog.webp" alt="PHP CRUD Blog" class="project-img" loading="lazy" />
+    <h3 class="project-title">Blog CRUD</h3>
+    <p class="project-desc">A complete CRUD blog built with PHP and MySQL, including user auth.</p>
+    <div class="project-tags">
+      <PHPIcon class="w-7 h-7" />
+      <MYSQLicon class="w-7 h-7" />
+      <BootsTrapIcon class="w-7 h-7" />
+    </div>
+    <div class="project-links">
+      <a href="https://github.com/tuusuario/blog" target="_blank" class="btn">View Code</a>
+      <a href="https://blog-demo.vercel.app" target="_blank" class="btn">View Project</a>
+    </div>
+  </article>
+
+  <!-- Proyecto -->
+  <article class="project-card from-teal-400/40 via-teal-500/30 to-black-500/40">
+    <img src="/projects/hangman.webp" alt="Hangman Game" class="project-img" loading="lazy" />
+    <h3 class="project-title">Hang Man</h3>
+    <p class="project-desc">A retro Hang Man game with a modern aesthetic.</p>
+    <div class="project-tags">
+      <HtmlIcon class="w-7 h-7" />
+      <CSSIcon class="w-7 h-7" />
+      <TailwindIcon class="w-7 h-7" />
+    </div>
+    <div class="project-links">
+      <a href="https://github.com/tuusuario/hangman" target="_blank" class="btn">View Code</a>
+      <a href="https://hangman-demo.vercel.app" target="_blank" class="btn">View Project</a>
+    </div>
+  </article>
+
+  <!-- Proyecto -->
+  <article class="project-card from-emerald-400/40 via-teal-400/30 to-cyan-500/40">
+    <img src="/projects/calculator.webp" alt="Calculator App" class="project-img" loading="lazy" />
+    <h3 class="project-title">Chess 3D</h3>
+    <p class="project-desc">A 3D chess game with realistic graphics and AI opponents.</p>
+    <div class="project-tags">
+      <HtmlIcon class="w-7 h-7" />
+      <CSSIcon class="w-7 h-7" />
+      <JavascriptIcon class="w-7 h-7" />
+    </div>
+    <div class="project-links">
+      <a href="https://github.com/tuusuario/calculator" target="_blank" class="btn">View Code</a>
+      <a href="https://calc-demo.vercel.app" target="_blank" class="btn">View Project</a>
+    </div>
+  </article>
+
+  <!-- Proyecto -->
+  <article class="project-card from-sky-400/40 via-cyan-400/30 to-blue-500/40">
+    <img src="/projects/weather-app.webp" alt="Weather App" class="project-img" loading="lazy" />
+    <h3 class="project-title">Weather App</h3>
+    <p class="project-desc">A weather forecast app fetching real-time data from an API.</p>
+    <div class="project-tags">
+      <HtmlIcon class="w-7 h-7" />
+      <CSSIcon class="w-7 h-7" />
+      <JavascriptIcon class="w-7 h-7" />
+    </div>
+    <div class="project-links">
+      <a href="https://github.com/tuusuario/weather-app" target="_blank" class="btn">View Code</a>
+      <a href="https://weather-demo.vercel.app" target="_blank" class="btn">View Project</a>
+    </div>
+  </article>
+
+  <!-- 🚀 Nuevo Proyecto -->
+  <article class="project-card from-purple-400/40 via-fuchsia-400/30 to-pink-500/40">
+    <img src="/projects/task-manager.webp" alt="Task Manager App" class="project-img" loading="lazy" />
+    <h3 class="project-title">Space Invader 3D</h3>
+    <p class="project-desc">A 3D space invader game with stunning graphics and engaging gameplay.</p>
+    <div class="project-tags">
+      <ReactIcon class="w-7 h-7" />
+      <ViteIcon class="w-7 h-7" />
+      <TailwindIcon class="w-7 h-7" />
+    </div>
+    <div class="project-links">
+      <a href="https://github.com/tuusuario/task-manager" target="_blank" class="btn">View Code</a>
+      <a href="https://taskmanager-demo.vercel.app" target="_blank" class="btn">View Project</a>
+    </div>
+  </article>
 </div>
 
 
 
-      <!-- Imagen del proyecto -->
-      <img
-        class="rounded-xl mb-6 border border-white/20 shadow-md transition-transform duration-300 group-hover:scale-[1.05]"
-        src={image}
-        alt={`Captura de pantalla del proyecto ${title}`}
-      />
-
-      <!-- Título -->
-      <h3
-        class="text-white text-3xl font-semibold mb-3 drop-shadow-[0_2px_6px_rgba(173,216,230,0.6)]"
-      >
-        {title}
-      </h3>
-
-      <!-- Descripción -->
-      <p class="text-gray-300 mb-6 text-lg leading-relaxed">{description}</p>
-
-      <!-- Tags -->
-   <ul class="flex flex-wrap gap-3 mb-6">
-  {tags.map((tag) => {
-    const Icon = tag.icon; // guardamos el componente en mayúscula
-    return (
-      <li
-        class="bg-blue-200/15 text-blue-100 px-4 py-2 rounded-full text-sm border border-blue-100/20 backdrop-blur-md hover:scale-105 transition-transform duration-200 flex items-center gap-2"
-      >
-        <tag.icon class="w-5 h-5" />
-        {tag.name}
-      </li>
-    );
-  })}
-</ul>
-
-
-      <!-- Botones de links -->
-      <div class="flex gap-4">
-        {link && (
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="frutiger-button"
-          >
-            Ver proyecto
-          </a>
-        )}
-        {github && (
-          <a
-            href={github}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="frutiger-button"
-          >
-            Código fuente
-          </a>
-        )}
-      </div>
-    </article>
-  ))}
-</section>
-
-<style is:global>
-@keyframes bubble-fast {
-  0% {
-    transform: translateY(0) scale(1);
-  }
-  50% {
-    transform: translateY(-40px) scale(1.1);
-  }
-  100% {
-    transform: translateY(0) scale(1);
-  }
-}
-
-.animate-bubble-fast {
-  animation: bubble-fast 6s ease-in-out infinite;
-}
-
-@keyframes bubble-fast {
-  0% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(30px, -40px) scale(1.05); }
-  50% { transform: translate(-20px, -60px) scale(1.1); }
-  75% { transform: translate(40px, -30px) scale(1.05); }
-  100% { transform: translate(0, 0) scale(1); }
-}
-.delay-\[3s\] {
-  animation-delay: 3s;
-}
-
-/* Animación fade-in-up */
-@keyframes fade-in-up {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-.animate-fade-in-up {
-  animation: fade-in-up 0.8s ease forwards;
-}
-
-.frutiger-button {
-  background: transparent;
-  border-radius: 1.25rem;
-  padding: 0.75rem 2rem;
-  font-weight: 600;
-  color: #aa9cff;
-  border: 1.5px solid rgba(170 156 255 / 0.5);
-  box-shadow:
-    inset 0 0 8px rgba(170 156 255 / 0.3);
-  backdrop-filter: blur(8px);
-  transition: all 0.4s ease;
-  user-select: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.frutiger-button:hover {
-  color: #d3ccff;
-  border-color: rgba(170 156 255 / 0.9);
-  box-shadow:
-    0 0 18px rgba(170 156 255 / 0.9),
-    inset 0 0 12px rgba(170 156 255 / 0.8);
-  transform: scale(1.05);
-}
-
-/* Asegura la transición suave */
-
-a.frutiger-button {
-  text-decoration: none;
-}
-</style>
-
-
 <style>
-@keyframes bubble-fast {
-  0% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(30px, -40px) scale(1.05); }
-  50% { transform: translate(-20px, -60px) scale(1.1); }
-  75% { transform: translate(40px, -30px) scale(1.05); }
-  100% { transform: translate(0, 0) scale(1); }
-}
-
-@keyframes bubble-slower {
-  0% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(-30px, 20px) scale(1.02); }
-  50% { transform: translate(20px, -30px) scale(1.05); }
-  75% { transform: translate(-25px, 25px) scale(1.02); }
-  100% { transform: translate(0, 0) scale(1); }
-}
-
-/* Animaciones */
-.animate-bubble-fast {
-  animation: bubble-fast 8s ease-in-out infinite;
-}
-
-.animate-bubble-slower {
-  animation: bubble-slower 12s ease-in-out infinite;
-}
-
-/* Delays dinámicos para cada burbuja */
-.delay-[1s] { animation-delay: 1s; }
-.delay-[2s] { animation-delay: 2s; }
-.delay-[3s] { animation-delay: 3s; }
-.delay-[4s] { animation-delay: 4s; }
-.delay-[5s] { animation-delay: 5s; }
-.delay-[6s] { animation-delay: 6s; }
-.delay-[7s] { animation-delay: 7s; }
-.delay-[8s] { animation-delay: 8s; }
-.delay-[9s] { animation-delay: 9s; }
+  .project-card {
+    @apply relative bg-gradient-to-br border border-white/20 rounded-3xl shadow-xl p-6 
+           hover:scale-[1.03] transition-transform duration-300 backdrop-blur-lg;
+  }
+  .project-img {
+    @apply rounded-2xl w-full object-cover h-48 shadow-lg;
+  }
+  .project-title {
+    @apply mt-4 text-2xl font-bold text-white drop-shadow-md;
+  }
+  .project-desc {
+    @apply mt-2 text-white/90 text-sm leading-relaxed;
+  }
+  .project-tags {
+    @apply flex gap-3 mt-4;
+  }
+  .project-links {
+    @apply flex gap-4 mt-6;
+  }
+  .btn {
+    @apply px-4 py-2 rounded-xl text-sm font-medium text-white bg-white/10 border border-white/30 backdrop-blur-md shadow-md;
+    transition: all 0.3s ease;
+  }
+  .btn:hover {
+    @apply bg-cyan-400/30 border-white/60 scale-105;
+    box-shadow: 0 0 15px rgba(0, 200, 255, 0.6);
+  }
 </style>
