@@ -32,7 +32,14 @@ const { description, title } = Astro.props;
       <canvas id="star-canvas" class="w-full h-full"></canvas>
     </div>
 
-    <!-- ✨ Efecto que ya tenías -->
+    <!-- Liquid Glass color blobs -->
+    <div class="fixed inset-0 z-[-3] pointer-events-none overflow-hidden">
+      <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-purple-700/25 blur-[120px] animate-blob"></div>
+      <div class="absolute top-[40%] right-[-10%] w-[420px] h-[420px] rounded-full bg-blue-600/20 blur-[120px] animate-blob animation-delay-2000"></div>
+      <div class="absolute bottom-[-5%] left-[30%] w-[380px] h-[380px] rounded-full bg-indigo-500/20 blur-[100px] animate-blob animation-delay-4000"></div>
+    </div>
+
+    <!-- ✨ Efecto breathing top light -->
     <div class="fixed inset-0 z-[-2] animate-breathing-top-light"></div>
 
     <!-- Layout principal -->
@@ -145,6 +152,15 @@ const { description, title } = Astro.props;
     overflow-x: hidden;
     width: 100%;
   }
+
+  @keyframes blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%       { transform: translate(30px, -20px) scale(1.05); }
+    66%       { transform: translate(-20px, 15px) scale(0.97); }
+  }
+  .animate-blob { animation: blob 14s ease-in-out infinite; }
+  .animation-delay-2000 { animation-delay: 2s; }
+  .animation-delay-4000 { animation-delay: 4s; }
 
   @media (prefers-reduced-motion: reduce) {
     html {

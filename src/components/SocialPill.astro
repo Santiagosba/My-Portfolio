@@ -8,26 +8,14 @@ const hasLabel = Boolean(label);
   target="_blank"
   rel="noopener noreferrer"
   aria-label={label}
-  class={`group relative inline-flex items-center
-    ${hasLabel ? "gap-2 px-5 py-2" : "w-14 h-10 justify-center"}
-    mr-2 ml-2 rounded-full overflow-hidden border border-white/20
-    backdrop-blur-md bg-white/10
-    transition-all duration-300 ease-out
-    hover:bg-white/15 hover:border-white/40
-    shadow-[inset_0_0_6px_rgba(255,255,255,0.4),_0_0_10px_rgba(173,216,230,0.15)] hover:shadow-[inset_0_0_10px_rgba(255,255,255,0.5),_0_0_15px_rgba(173,216,230,0.4)]`}
+  class={`group lg-pill inline-flex items-center
+    ${hasLabel ? "gap-2 px-5 py-2" : "w-12 h-10 justify-center"}
+    rounded-full text-white/90`}
 >
-  <!-- Reflejo animado -->
-  <span
-    class="absolute inset-0 before:content-[''] before:absolute before:-left-1/4 before:-top-1/4 before:w-1/2 before:h-full before:rotate-45 before:bg-white/30 before:blur-md group-hover:before:animate-sheen pointer-events-none"
-  ></span>
-
   <slot />
-
-  {
-    hasLabel && (
-      <span class="text-xs text-white group-hover:text-violet-300 transition">
-        {label}
-      </span>
-    )
-  }
+  {hasLabel && (
+    <span class="text-xs font-medium group-hover:text-violet-200 transition">
+      {label}
+    </span>
+  )}
 </a>

@@ -14,7 +14,7 @@ import ThreeJSIcon from "./icons/ThreeJSIcon.astro";
 
 <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
   <!-- Proyecto -->
-  <article class="project-card from-orange-400/40 via-grey-400/30 to-black-500/40">
+  <article class="project-card lg-card">
     <img src="/projects/bmth_media_player.webp" alt="Music Player" class="project-img" loading="lazy" />
     <h3 class="project-title">BMTH Music Player</h3>
     <p class="project-desc">A custom music player to listen to Bring Me The Horizon.</p>
@@ -31,7 +31,7 @@ import ThreeJSIcon from "./icons/ThreeJSIcon.astro";
   </article>
 
   <!-- Proyecto -->
-  <article class="project-card from-indigo-400/40 via-green-500/30 to-red-500/40">
+  <article class="project-card lg-card">
     <img src="/projects/RubikCube.webp" alt="Rubik Cube 3D" class="project-img" loading="lazy" />
     <h3 class="project-title">Rubik Cube 3D</h3>
     <p class="project-desc">A 3D interactive Rubik’s Cube built with React and Three.js.</p>
@@ -47,7 +47,7 @@ import ThreeJSIcon from "./icons/ThreeJSIcon.astro";
   </article>
 
   <!-- Proyecto -->
-  <article class="project-card from-lime-400/40 via-green-500/30 to-black-500/40">
+  <article class="project-card lg-card">
     <img src="/projects/pong_game.webp" alt="Classic Pong Game" class="project-img" loading="lazy" />
     <h3 class="project-title">Classic Pong</h3>
     <p class="project-desc">A classic Pong game recreated with physics and smooth animations.</p>
@@ -63,7 +63,7 @@ import ThreeJSIcon from "./icons/ThreeJSIcon.astro";
   </article>
 
   <!-- Proyecto -->
-  <article class="project-card from-green-400/40 via-lime-400/30 to-black-500/40">
+  <article class="project-card lg-card">
     <img src="/projects/Digital World Clock.webp" alt="World Clock" class="project-img" loading="lazy" />
     <h3 class="project-title">World Clock</h3>
     <p class="project-desc">An interactive world clock with military aesthetic and timezones.</p>
@@ -79,7 +79,7 @@ import ThreeJSIcon from "./icons/ThreeJSIcon.astro";
   </article>
 
   <!-- Proyecto -->
-  <article class="project-card from-pink-400/40 via-gray-500/30 to-indigo-500/40">
+  <article class="project-card lg-card">
     <img src="/projects/blog.webp" alt="PHP CRUD Blog" class="project-img" loading="lazy" />
     <h3 class="project-title">Blog CRUD</h3>
     <p class="project-desc">A complete CRUD blog built with PHP and MySQL, including user auth.</p>
@@ -96,7 +96,7 @@ import ThreeJSIcon from "./icons/ThreeJSIcon.astro";
   </article>
 
   <!-- Proyecto -->
-  <article class="project-card from-teal-400/40 via-teal-500/30 to-black-500/40">
+  <article class="project-card lg-card">
     <img src="/projects/hangman.webp" alt="Hangman Game" class="project-img" loading="lazy" />
     <h3 class="project-title">Hang Man</h3>
     <p class="project-desc">A retro Hang Man game with a modern aesthetic.</p>
@@ -164,30 +164,41 @@ import ThreeJSIcon from "./icons/ThreeJSIcon.astro";
 
 <style>
   .project-card {
-    @apply relative bg-gradient-to-br border border-white/20 rounded-3xl shadow-xl p-6 
-           hover:scale-[1.03] transition-transform duration-300 backdrop-blur-lg;
+    @apply p-6;
   }
   .project-img {
-    @apply rounded-2xl w-full object-cover h-48 shadow-lg;
+    @apply rounded-2xl w-full object-cover shadow-lg;
+    height: 180px;
+    border: 1px solid rgba(255,255,255,0.15);
   }
   .project-title {
-    @apply mt-4 text-2xl font-bold text-white drop-shadow-md;
+    @apply mt-4 text-xl font-bold text-white;
+    text-shadow: 0 2px 8px rgba(173,216,230,0.4);
   }
   .project-desc {
-    @apply mt-2 text-white/90 text-sm leading-relaxed;
+    @apply mt-2 text-white/80 text-sm leading-relaxed;
   }
   .project-tags {
     @apply flex gap-3 mt-4;
   }
   .project-links {
-    @apply flex gap-4 mt-6;
+    @apply flex gap-3 mt-5;
   }
   .btn {
-    @apply px-4 py-2 rounded-xl text-sm font-medium text-white bg-white/10 border border-white/30 backdrop-blur-md shadow-md;
-    transition: all 0.3s ease;
+    @apply px-4 py-1.5 rounded-full text-sm font-medium text-white/90;
+    background: linear-gradient(145deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-top:    1px solid rgba(255,255,255,0.55);
+    border-left:   1px solid rgba(255,255,255,0.25);
+    border-right:  1px solid rgba(255,255,255,0.10);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3), inset 0 1.5px 0 rgba(255,255,255,0.45);
+    transition: all 0.25s ease;
   }
   .btn:hover {
-    @apply bg-cyan-400/30 border-white/60 scale-105;
-    box-shadow: 0 0 15px rgba(0, 200, 255, 0.6);
+    background: linear-gradient(145deg, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.12) 100%);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.4), inset 0 1.5px 0 rgba(255,255,255,0.6), 0 0 18px rgba(180,150,255,0.25);
+    transform: translateY(-2px);
   }
 </style>

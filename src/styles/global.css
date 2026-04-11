@@ -152,6 +152,80 @@
 
 
 
+/* ===================== LIQUID GLASS SYSTEM ===================== */
+
+.lg-card {
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(28px) saturate(200%) brightness(1.05);
+  -webkit-backdrop-filter: blur(28px) saturate(200%) brightness(1.05);
+  border-top:    1px solid rgba(255, 255, 255, 0.50);
+  border-left:   1px solid rgba(255, 255, 255, 0.22);
+  border-right:  1px solid rgba(255, 255, 255, 0.10);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.50),
+    0  4px 14px rgba(0, 0, 0, 0.25),
+    inset 0  1.5px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -1px   0 rgba(0,   0,   0,   0.20),
+    inset 1px 0    0 rgba(255, 255, 255, 0.12);
+  border-radius: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Inner top glare */
+.lg-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 38%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.07) 0%, transparent 100%);
+  border-radius: 1.5rem 1.5rem 0 0;
+  pointer-events: none;
+}
+
+.lg-card:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.55),
+    0  8px 22px rgba(0, 0, 0, 0.30),
+    inset 0  1.5px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -1px   0 rgba(0,   0,   0,   0.20),
+    inset 1px 0    0 rgba(255, 255, 255, 0.18),
+    0 0 40px rgba(160, 130, 255, 0.18);
+}
+
+.lg-pill {
+  background: linear-gradient(145deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.06) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-top:    1px solid rgba(255, 255, 255, 0.55);
+  border-left:   1px solid rgba(255, 255, 255, 0.25);
+  border-right:  1px solid rgba(255, 255, 255, 0.10);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.50),
+    inset 0 -1px  0 rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease;
+}
+
+.lg-pill:hover {
+  background: linear-gradient(145deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.10) 100%);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.60),
+    inset 0 -1px  0 rgba(0, 0, 0, 0.15),
+    0 0 20px rgba(180, 150, 255, 0.25);
+  transform: translateY(-2px);
+}
+
 /* Fondo Espacial */
 
 /* Fondo espacial fijo */
