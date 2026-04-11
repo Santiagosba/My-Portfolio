@@ -27,20 +27,10 @@ const { description, title } = Astro.props;
   </head>
   <body class="relative bg-black text-white min-h-screen flex flex-col overflow-x-hidden w-full">
     
-    <!-- 🌌 Fondo de estrellas y estrellas fugaces -->
+    <!-- Space canvas (stars + nebulae + shooting stars) -->
     <div class="fixed inset-0 -z-10 pointer-events-none">
       <canvas id="star-canvas" class="w-full h-full"></canvas>
     </div>
-
-    <!-- Liquid Glass color blobs -->
-    <div class="fixed inset-0 z-[-3] pointer-events-none overflow-hidden">
-      <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] rounded-full bg-purple-700/25 blur-[120px] animate-blob"></div>
-      <div class="absolute top-[40%] right-[-10%] w-[420px] h-[420px] rounded-full bg-blue-600/20 blur-[120px] animate-blob animation-delay-2000"></div>
-      <div class="absolute bottom-[-5%] left-[30%] w-[380px] h-[380px] rounded-full bg-indigo-500/20 blur-[100px] animate-blob animation-delay-4000"></div>
-    </div>
-
-    <!-- ✨ Efecto breathing top light -->
-    <div class="fixed inset-0 z-[-2] animate-breathing-top-light"></div>
 
     <!-- Layout principal -->
     <Header class="relative z-10 bg-transparent" />
@@ -53,84 +43,151 @@ const { description, title } = Astro.props;
 </main>
 
 
-    <!-- 🎇 Script inline para estrellas y estrellas fugaces -->
     <script is:inline>
+    (function () {
       const canvas = document.getElementById('star-canvas');
-      const ctx = canvas.getContext('2d');
-      let stars = [];
-      let shootingStars = [];
+      const ctx    = canvas.getContext('2d');
+      let W = 0, H = 0, stars = [], shooters = [], nebula = null, t = 0;
 
-      function resizeCanvas() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+      /* ── Resize ── */
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+        nebula = null;
+        buildStars();
       }
-      window.addEventListener('resize', resizeCanvas);
-      resizeCanvas();
+      window.addEventListener('resize', resize);
+      resize();
 
-      function createStars(count) {
-        stars = [];
-        for (let i = 0; i < count; i++) {
-          stars.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            radius: Math.random() * 1.2,
-            opacity: Math.random(),
-            speed: Math.random() * 0.2,
-          });
-        }
-      }
+      /* ── Nebula (painted once to an offscreen canvas) ── */
+      function buildNebula() {
+        const nc = document.createElement('canvas');
+        nc.width = W; nc.height = H;
+        const nx = nc.getContext('2d');
 
-      function createShootingStar() {
-        shootingStars.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height * 0.5,
-          length: Math.random() * 80 + 100,
-          speed: Math.random() * 10 + 6,
-          angle: Math.PI / 4,
-          opacity: 1,
+        // Deep-space base gradient
+        const base = nx.createRadialGradient(W*0.5, H*0.3, 0, W*0.5, H*0.3, W*0.9);
+        base.addColorStop(0,   'rgba(10,8,30,0.95)');
+        base.addColorStop(1,   'rgba(0,0,8,1)');
+        nx.fillStyle = base;
+        nx.fillRect(0, 0, W, H);
+
+        // Nebula clouds
+        const clouds = [
+          { cx:0.22, cy:0.20, r:0.48, stops:[[0,'rgba(100,45,200,0.24)'],[0.4,'rgba(65,25,140,0.11)'],[1,'rgba(0,0,0,0)']] },
+          { cx:0.76, cy:0.62, r:0.42, stops:[[0,'rgba(20,60,190,0.20)'],[0.5,'rgba(12,38,115,0.09)'],[1,'rgba(0,0,0,0)']] },
+          { cx:0.50, cy:0.88, r:0.34, stops:[[0,'rgba(10,85,145,0.16)'],[1,'rgba(0,0,0,0)']] },
+          { cx:0.88, cy:0.14, r:0.26, stops:[[0,'rgba(85,22,160,0.18)'],[1,'rgba(0,0,0,0)']] },
+          { cx:0.36, cy:0.50, r:0.20, stops:[[0,'rgba(40,70,210,0.10)'],[1,'rgba(0,0,0,0)']] },
+        ];
+        clouds.forEach(c => {
+          const g = nx.createRadialGradient(c.cx*W, c.cy*H, 2, c.cx*W, c.cy*H, c.r*W);
+          c.stops.forEach(([s, col]) => g.addColorStop(s, col));
+          nx.fillStyle = g;
+          nx.fillRect(0, 0, W, H);
         });
+        return nc;
       }
 
-      function drawStars() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (let star of stars) {
+      /* ── Stars (3 layers) ── */
+      function buildStars() {
+        stars = [];
+        // Micro dust — many, tiny, dim
+        for (let i = 0; i < 320; i++)
+          stars.push(mkStar(Math.random()*0.3+0.15, Math.random()*0.5+0.2, 0.012, false));
+        // Regular stars
+        for (let i = 0; i < 140; i++)
+          stars.push(mkStar(Math.random()*0.4+0.38, Math.random()*0.65+0.65, 0.020, false));
+        // Bright stars with bloom
+        for (let i = 0; i < 22; i++)
+          stars.push(mkStar(Math.random()*0.28+0.70, Math.random()*1.1+1.5, 0.032, true));
+      }
+
+      function mkStar(base, r, freq, glow) {
+        return { x:Math.random()*W, y:Math.random()*H, r, base,
+                 range: 0.14, phase:Math.random()*Math.PI*2, freq, glow };
+      }
+
+      /* ── Main loop ── */
+      function frame() {
+        t += 0.016;
+
+        // Background fill
+        ctx.fillStyle = '#00000c';
+        ctx.fillRect(0, 0, W, H);
+
+        // Nebula
+        if (!nebula) nebula = buildNebula();
+        ctx.drawImage(nebula, 0, 0);
+
+        // Stars
+        for (const s of stars) {
+          const op = Math.max(0, Math.min(1, s.base + Math.sin(t * s.freq * 60 + s.phase) * s.range));
+          if (s.glow) {
+            const bloom = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 6);
+            bloom.addColorStop(0,   `rgba(215,228,255,${op * 0.32})`);
+            bloom.addColorStop(0.4, `rgba(180,205,255,${op * 0.10})`);
+            bloom.addColorStop(1,   'rgba(0,0,0,0)');
+            ctx.fillStyle = bloom;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.r * 6, 0, Math.PI*2);
+            ctx.fill();
+          }
           ctx.beginPath();
-          ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(255, 255, 255, ${star.opacity})`;
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+          ctx.fillStyle = `rgba(${s.glow ? '218,230,255' : '200,215,255'},${op})`;
           ctx.fill();
         }
-      }
 
-      function drawShootingStars() {
-        for (let i = 0; i < shootingStars.length; i++) {
-          const star = shootingStars[i];
-          const dx = Math.cos(star.angle) * star.length;
-          const dy = Math.sin(star.angle) * star.length;
+        // Shooting stars
+        for (let i = shooters.length - 1; i >= 0; i--) {
+          const s = shooters[i];
+          s.x    += Math.cos(s.angle) * s.spd;
+          s.y    += Math.sin(s.angle) * s.spd;
+          s.life -= 0.016;
+          if (s.life <= 0) { shooters.splice(i, 1); continue; }
 
+          const fade = s.life > 0.85 ? (1 - s.life) / 0.15
+                     : s.life < 0.20 ? s.life / 0.20 : 1;
+          const tx = s.x - Math.cos(s.angle) * s.len;
+          const ty = s.y - Math.sin(s.angle) * s.len;
+
+          const g = ctx.createLinearGradient(tx, ty, s.x, s.y);
+          g.addColorStop(0,   'rgba(255,255,255,0)');
+          g.addColorStop(0.5, `rgba(200,220,255,${fade * 0.55})`);
+          g.addColorStop(1,   `rgba(255,255,255,${fade})`);
           ctx.beginPath();
-          ctx.moveTo(star.x, star.y);
-          ctx.lineTo(star.x - dx, star.y - dy);
-          ctx.strokeStyle = `rgba(255, 255, 255, ${star.opacity})`;
-          ctx.lineWidth = 2;
+          ctx.moveTo(tx, ty);
+          ctx.lineTo(s.x, s.y);
+          ctx.strokeStyle = g;
+          ctx.lineWidth   = 1.5;
           ctx.stroke();
 
-          star.x += star.speed;
-          star.y += star.speed;
-          star.opacity -= 0.01;
-
-          if (star.opacity <= 0) shootingStars.splice(i, 1);
+          // Glowing head
+          const head = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, 5);
+          head.addColorStop(0, `rgba(255,255,255,${fade})`);
+          head.addColorStop(1, 'rgba(255,255,255,0)');
+          ctx.fillStyle = head;
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, 5, 0, Math.PI*2);
+          ctx.fill();
         }
+
+        // Spawn new shooting star (avg every ~5s)
+        if (Math.random() < 0.003) {
+          const angle = (Math.random() * 0.45 + 0.12) * Math.PI;
+          shooters.push({
+            x: Math.random() * W * 0.65, y: Math.random() * H * 0.40,
+            angle, spd: Math.random() * 9 + 7,
+            len: Math.random() * 140 + 90, life: 1.0
+          });
+        }
+
+        requestAnimationFrame(frame);
       }
 
-      function animate() {
-        drawStars();
-        drawShootingStars();
-        if (Math.random() < 0.01) createShootingStar();
-        requestAnimationFrame(animate);
-      }
-
-      createStars(200);
-      animate();
+      frame();
+    })();
     </script>
   </body>
 </html>
@@ -152,15 +209,6 @@ const { description, title } = Astro.props;
     overflow-x: hidden;
     width: 100%;
   }
-
-  @keyframes blob {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33%       { transform: translate(30px, -20px) scale(1.05); }
-    66%       { transform: translate(-20px, 15px) scale(0.97); }
-  }
-  .animate-blob { animation: blob 14s ease-in-out infinite; }
-  .animation-delay-2000 { animation-delay: 2s; }
-  .animation-delay-4000 { animation-delay: 4s; }
 
   @media (prefers-reduced-motion: reduce) {
     html {
