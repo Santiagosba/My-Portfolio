@@ -4,9 +4,6 @@ import HtmlIcon from "./icons/HTMLIcon.astro";
 import CSSIcon from "./icons/CSSIcon.astro";
 import JavascriptIcon from "./icons/JavascriptIcon.astro";
 import ViteIcon from "./icons/ViteIcon.astro";
-import PHPIcon from "./icons/PHPIcon.astro";
-import MYSQLicon from "./icons/MYSQLicon.astro";
-import BootsTrapIcon from "./icons/BootsTrapIcon.astro";
 import TailwindIcon from "./icons/TAILWINDCSSicon.astro";
 import TypeScriptIcon from "./icons/TypescriptIcon.astro";
 import ThreeJSIcon from "./icons/ThreeJSIcon.astro";
@@ -68,22 +65,6 @@ import PostgreSQLIcon from "./icons/PostgreSQLIcon.astro";
 
   <!-- Proyecto -->
   <article class="project-card lg-card">
-    <img src="/projects/pong_game.webp" alt="Classic Pong Game" class="project-img" loading="lazy" />
-    <h3 class="project-title">Classic Pong</h3>
-    <p class="project-desc">A classic Pong game recreated with physics and smooth animations.</p>
-    <div class="project-tags">
-      <HtmlIcon class="w-7 h-7" />
-      <CSSIcon class="w-7 h-7" />
-      <JavascriptIcon class="w-7 h-7" />
-    </div>
-    <div class="project-links">
-      <a href="https://github.com/Santiagosba/Pong-Game" target="_blank" class="btn">View Code</a>
-      <a href="https://pong-demo.vercel.app" target="_blank" class="btn">View Project</a>
-    </div>
-  </article>
-
-  <!-- Proyecto -->
-  <article class="project-card lg-card">
     <img src="/projects/Digital World Clock.webp" alt="World Clock" class="project-img" loading="lazy" />
     <h3 class="project-title">World Clock</h3>
     <p class="project-desc">An interactive world clock with military aesthetic and timezones.</p>
@@ -98,40 +79,7 @@ import PostgreSQLIcon from "./icons/PostgreSQLIcon.astro";
     </div>
   </article>
 
-  <!-- Proyecto -->
-  <article class="project-card lg-card">
-    <img src="/projects/blog.webp" alt="PHP CRUD Blog" class="project-img" loading="lazy" />
-    <h3 class="project-title">Blog CRUD</h3>
-    <p class="project-desc">A complete CRUD blog built with PHP and MySQL, including user auth.</p>
-    <div class="project-tags">
-    
-      <PHPIcon class="w-7 h-7" />
-      <MYSQLicon class="w-7 h-7" />
-      <BootsTrapIcon class="w-7 h-7" />
-    </div>
-    <div class="project-links">
-      <a href="https://github.com/Santiagosba/Blog-PHP-CRUD.git" target="_blank" class="btn">View Code</a>
-      <a href="https://blog-demo.vercel.app" target="_blank" class="btn">View Project</a>
-    </div>
-  </article>
-
-  <!-- Proyecto -->
-  <article class="project-card lg-card">
-    <img src="/projects/hangman.webp" alt="Hangman Game" class="project-img" loading="lazy" />
-    <h3 class="project-title">Hang Man</h3>
-    <p class="project-desc">A retro Hang Man game with a modern aesthetic.</p>
-    <div class="project-tags">
-       <ReactIcon class="w-7 h-7" />
-      <TypeScriptIcon class="w-7 h-7" />
-      <TailwindIcon class="w-7 h-7" />
-    </div>
-    <div class="project-links">
-      <a href="https://github.com/Santiagosba/HangMan-Game.git" target="_blank" class="btn">View Code</a>
-      <a href="https://hangman-demo.vercel.app" target="_blank" class="btn">View Project</a>
-    </div>
-  </article>
-
-  <!-- Proyecto 
+  <!-- Proyecto
   <article class="project-card from-emerald-400/40 via-teal-400/30 to-cyan-500/40">
     <img src="/projects/calculator.webp" alt="Calculator App" class="project-img" loading="lazy" />
     <h3 class="project-title">Chess 3D</h3>
@@ -206,29 +154,31 @@ import PostgreSQLIcon from "./icons/PostgreSQLIcon.astro";
   }
   .btn {
     @apply px-4 py-1.5 rounded-full text-sm font-medium text-white/90;
-    background: linear-gradient(155deg, rgba(255,255,255,0.12) 0%, rgba(200,215,255,0.04) 50%, rgba(255,255,255,0.01) 100%);
-    backdrop-filter: blur(32px) saturate(240%) brightness(1.14);
-    -webkit-backdrop-filter: blur(32px) saturate(240%) brightness(1.14);
-    border-top:    1.5px solid rgba(255,255,255,0.65);
-    border-left:   1px   solid rgba(255,255,255,0.22);
-    border-right:  1px   solid rgba(255,255,255,0.08);
-    border-bottom: 1px   solid rgba(255,255,255,0.06);
+    background-image:
+      linear-gradient(180deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.015) 40%, rgba(0,0,0,0.30) 100%),
+      linear-gradient(108deg, transparent 0%, rgba(255,255,255,0.06) 45%, transparent 65%);
+    backdrop-filter: blur(22px) saturate(150%) contrast(1.05) brightness(1.05);
+    -webkit-backdrop-filter: blur(22px) saturate(150%) contrast(1.05) brightness(1.05);
+    border: 1px solid rgba(255,255,255,0.13);
+    border-top-color: rgba(255,255,255,0.40);
     box-shadow:
-      inset 0 1.5px 0 rgba(255,255,255,0.80),
-      inset 1.5px 0 0 rgba(255,255,255,0.20),
-      inset -1px 0 0 rgba(0,0,0,0.18),
-      inset 0 -1.5px 0 rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.22),
+      /* CoachOS chromatic edges */
+      inset 2px 0 8px -2px rgba(255,72,118,0.32),
+      inset -2px 0 8px -2px rgba(75,178,255,0.36),
+      inset 0 -1px 0 rgba(0,0,0,0.55),
       0 8px 24px rgba(0,0,0,0.40),
       0 2px 6px rgba(0,0,0,0.22);
-    transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.28s ease;
+    transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.28s ease, border-color 0.28s ease;
   }
   .btn:hover {
     transform: translateY(-2px) scale(1.04);
+    border-top-color: rgba(255,255,255,0.55);
     box-shadow:
-      inset 0 1.5px 0 rgba(255,255,255,0.95),
-      inset 1.5px 0 0 rgba(255,255,255,0.26),
-      inset -1px 0 0 rgba(0,0,0,0.18),
-      inset 0 -1.5px 0 rgba(0,0,0,0.25),
+      inset 0 1px 0 rgba(255,255,255,0.30),
+      inset 2px 0 10px -2px rgba(255,72,118,0.48),
+      inset -2px 0 10px -2px rgba(75,178,255,0.54),
+      inset 0 -1px 0 rgba(0,0,0,0.55),
       0 12px 36px rgba(0,0,0,0.48),
       0 0 20px rgba(110,70,220,0.22);
   }

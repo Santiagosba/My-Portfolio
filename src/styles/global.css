@@ -169,40 +169,49 @@
   overflow: hidden;
   border-radius: 1.5rem;
 
-  /* Near-invisible base — glass is mostly clear with a faint ice-blue tint */
-  background: linear-gradient(
-    160deg,
-    rgba(255, 255, 255, 0.11) 0%,
-    rgba(190, 210, 255, 0.04) 40%,
-    rgba(255, 255, 255, 0.01) 100%
-  );
+  /*
+    CoachOS liquid glass: a darker translucent panel (so white text pops over
+    the vivid nebula), a warm ember hint at the base, and a diagonal sheen streak.
+  */
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.090) 0%,
+      rgba(255, 255, 255, 0.015) 30%,
+      rgba(0, 0, 0, 0.34) 78%,
+      rgba(255, 132, 70, 0.045) 100%
+    ),
+    linear-gradient(
+      108deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.05) 42%,
+      transparent 62%
+    );
 
-  /* KEY: 48px blur + 280% saturation = nebulae glow vividly through the glass */
-  backdrop-filter: blur(48px) saturate(280%) brightness(1.18);
-  -webkit-backdrop-filter: blur(48px) saturate(280%) brightness(1.18);
+  /* Refractive glass: moderate blur, boosted saturation + contrast (CoachOS feel) */
+  backdrop-filter: blur(26px) saturate(150%) contrast(1.05) brightness(1.05);
+  -webkit-backdrop-filter: blur(26px) saturate(150%) contrast(1.05) brightness(1.05);
 
-  /* Directional glass edges: top is bright (specular), sides/bottom barely there */
-  border-top:    1.5px solid rgba(255, 255, 255, 0.60);
-  border-left:   1px   solid rgba(255, 255, 255, 0.20);
-  border-right:  1px   solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px   solid rgba(255, 255, 255, 0.06);
+  /* Fine light rim up top, near-invisible on the other edges */
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-top-color: rgba(255, 255, 255, 0.34);
 
   box-shadow:
-    /* Crisp inner specular — the "rim" of glass catching light */
-    inset 0    1.5px 0  rgba(255, 255, 255, 0.85),
-    /* Left-edge secondary specular */
-    inset 1.5px  0   0  rgba(255, 255, 255, 0.28),
-    /* Right-edge and bottom — glass thickness in shadow */
-    inset -1px   0   0  rgba(0, 0, 0, 0.22),
-    inset 0   -1.5px 0  rgba(0, 0, 0, 0.32),
-    /* Diffuse inner top glow — light entering the glass */
-    inset 0   14px  36px rgba(255, 255, 255, 0.05),
-    /* Outer: deep realistic shadow */
-    0  28px  90px rgba(0, 0, 0, 0.70),
-    0   6px  22px rgba(0, 0, 0, 0.38);
+    /* Deep outer shadow — the glass floating above the scene */
+    0 28px 78px rgba(0, 0, 0, 0.62),
+    0  6px 22px rgba(0, 0, 0, 0.40),
+    /* Top specular rim */
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    /* CoachOS signature — chromatic edges: pink-red left, ice-blue right */
+    inset  3px 0 12px -3px rgba(255, 72, 118, 0.36),
+    inset -3px 0 12px -3px rgba(75, 178, 255, 0.42),
+    /* Bottom thickness in shadow */
+    inset 0 -1px 0 rgba(0, 0, 0, 0.72),
+    /* Soft inner top glow — light entering the glass */
+    inset 0 14px 40px rgba(255, 255, 255, 0.04);
 
   transition: transform 0.40s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.40s ease;
+              box-shadow 0.40s ease, border-color 0.40s ease;
 }
 
 /* Inner top glare — light diffusing through the glass */
@@ -213,7 +222,7 @@
   height: 50%;
   background: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.09) 0%,
     rgba(255, 255, 255, 0.025) 40%,
     transparent 100%
   );
@@ -224,17 +233,19 @@
 
 .lg-card:hover {
   transform: translateY(-6px) scale(1.018);
+  border-top-color: rgba(255, 255, 255, 0.50);
   box-shadow:
-    inset 0    1.5px 0  rgba(255, 255, 255, 0.95),
-    inset 1.5px  0   0  rgba(255, 255, 255, 0.32),
-    inset -1px   0   0  rgba(0, 0, 0, 0.22),
-    inset 0   -1.5px 0  rgba(0, 0, 0, 0.32),
-    inset 0   14px  36px rgba(255, 255, 255, 0.07),
-    0  36px 110px rgba(0, 0, 0, 0.75),
-    0   8px  28px rgba(0, 0, 0, 0.42),
+    0 36px 110px rgba(0, 0, 0, 0.68),
+    0  8px  28px rgba(0, 0, 0, 0.44),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    /* Chromatic edges glow brighter on hover */
+    inset  3px 0 16px -3px rgba(255, 72, 118, 0.52),
+    inset -3px 0 16px -3px rgba(75, 178, 255, 0.60),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.72),
+    inset 0 14px 40px rgba(255, 255, 255, 0.06),
     /* Picks up nebula purple/blue on hover */
-    0   0   55px rgba(100, 55, 210, 0.22),
-    0   0   28px rgba(45,  85, 215, 0.16);
+    0 0 55px rgba(120, 60, 210, 0.22),
+    0 0 30px rgba(60, 120, 235, 0.18);
 }
 
 /* ── Pill variant (header, buttons, social links) ── */
@@ -252,10 +263,11 @@
   border-right:  1px   solid rgba(255, 255, 255, 0.08);
   border-bottom: 1px   solid rgba(255, 255, 255, 0.06);
   box-shadow:
-    inset 0   1.5px 0  rgba(255, 255, 255, 0.80),
-    inset 1.5px 0   0  rgba(255, 255, 255, 0.22),
-    inset -1px  0   0  rgba(0, 0, 0, 0.18),
-    inset 0  -1.5px 0  rgba(0, 0, 0, 0.25),
+    inset 0   1px 0  rgba(255, 255, 255, 0.60),
+    /* CoachOS chromatic edges — pink left, blue right */
+    inset  2px 0 7px -2px rgba(255, 72, 118, 0.30),
+    inset -2px 0 7px -2px rgba(75, 178, 255, 0.34),
+    inset 0  -1px 0  rgba(0, 0, 0, 0.55),
     0 10px 32px rgba(0, 0, 0, 0.45),
     0  3px  8px rgba(0, 0, 0, 0.25);
   transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -265,10 +277,10 @@
 .lg-pill:hover {
   transform: translateY(-2px) scale(1.03);
   box-shadow:
-    inset 0   1.5px 0  rgba(255, 255, 255, 0.95),
-    inset 1.5px 0   0  rgba(255, 255, 255, 0.28),
-    inset -1px  0   0  rgba(0, 0, 0, 0.18),
-    inset 0  -1.5px 0  rgba(0, 0, 0, 0.25),
+    inset 0   1px 0  rgba(255, 255, 255, 0.75),
+    inset  2px 0 9px -2px rgba(255, 72, 118, 0.44),
+    inset -2px 0 9px -2px rgba(75, 178, 255, 0.50),
+    inset 0  -1px 0  rgba(0, 0, 0, 0.55),
     0 14px 40px rgba(0, 0, 0, 0.50),
     0  4px 12px rgba(0, 0, 0, 0.30),
     0  0   22px rgba(120, 80, 220, 0.22);
