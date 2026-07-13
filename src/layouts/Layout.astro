@@ -47,94 +47,226 @@ const { description, title } = Astro.props;
     (function () {
       const canvas = document.getElementById('star-canvas');
       const ctx    = canvas.getContext('2d');
-      let W = 0, H = 0, stars = [], shooters = [], nebula = null, t = 0;
 
-      /* ── Resize ── */
+      const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // High-definition rendering (cap DPR at 2 for performance)
+      let DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+      // Parallax config (CSS px)
+      const NEB_SHIFT  = 26;   // how far the nebula pans
+      const STAR_SHIFT = 46;   // how far the nearest star layer pans
+      const MARGIN     = Math.max(NEB_SHIFT, STAR_SHIFT) + 24; // offscreen bleed
+
+      let W = 0, H = 0, stars = [], shooters = [], nebula = null,
+          noiseTile = null, t = 0;
+
+      // Parallax state: target (tx,ty) and smoothed (cx,cy), range [-1,1]
+      let tx = 0, ty = 0, cx = 0, cy = 0;
+
+      /* ── Resize (HD aware) ── */
       function resize() {
-        W = canvas.width  = window.innerWidth;
-        H = canvas.height = window.innerHeight;
+        DPR = Math.min(window.devicePixelRatio || 1, 2);
+        W = window.innerWidth;
+        H = window.innerHeight;
+        canvas.width  = Math.floor(W * DPR);
+        canvas.height = Math.floor(H * DPR);
+        ctx.setTransform(DPR, 0, 0, DPR, 0, 0); // draw using CSS px, render in HD
         nebula = null;
         buildStars();
       }
       window.addEventListener('resize', resize);
-      resize();
 
-      /* ── Nebula (painted once to an offscreen canvas) ── */
-      function buildNebula() {
+      /* ── Fine noise tile for nebula texture ── */
+      function buildNoise() {
+        const size = 128;
         const nc = document.createElement('canvas');
-        nc.width = W; nc.height = H;
+        nc.width = nc.height = size;
         const nx = nc.getContext('2d');
-
-        // Deep-space base gradient
-        const base = nx.createRadialGradient(W*0.5, H*0.3, 0, W*0.5, H*0.3, W*0.9);
-        base.addColorStop(0,   'rgba(10,8,30,0.95)');
-        base.addColorStop(1,   'rgba(0,0,8,1)');
-        nx.fillStyle = base;
-        nx.fillRect(0, 0, W, H);
-
-        // Nebula clouds
-        const clouds = [
-          { cx:0.22, cy:0.20, r:0.48, stops:[[0,'rgba(100,45,200,0.24)'],[0.4,'rgba(65,25,140,0.11)'],[1,'rgba(0,0,0,0)']] },
-          { cx:0.76, cy:0.62, r:0.42, stops:[[0,'rgba(20,60,190,0.20)'],[0.5,'rgba(12,38,115,0.09)'],[1,'rgba(0,0,0,0)']] },
-          { cx:0.50, cy:0.88, r:0.34, stops:[[0,'rgba(10,85,145,0.16)'],[1,'rgba(0,0,0,0)']] },
-          { cx:0.88, cy:0.14, r:0.26, stops:[[0,'rgba(85,22,160,0.18)'],[1,'rgba(0,0,0,0)']] },
-          { cx:0.36, cy:0.50, r:0.20, stops:[[0,'rgba(40,70,210,0.10)'],[1,'rgba(0,0,0,0)']] },
-        ];
-        clouds.forEach(c => {
-          const g = nx.createRadialGradient(c.cx*W, c.cy*H, 2, c.cx*W, c.cy*H, c.r*W);
-          c.stops.forEach(([s, col]) => g.addColorStop(s, col));
-          nx.fillStyle = g;
-          nx.fillRect(0, 0, W, H);
-        });
+        const img = nx.createImageData(size, size);
+        for (let i = 0; i < img.data.length; i += 4) {
+          const v = (Math.random() * 255) | 0;
+          img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
+          img.data[i + 3] = 255;
+        }
+        nx.putImageData(img, 0, 0);
         return nc;
       }
 
-      /* ── Stars (3 layers) ── */
-      function buildStars() {
-        stars = [];
-        // Micro dust — many, tiny, dim
-        for (let i = 0; i < 320; i++)
-          stars.push(mkStar(Math.random()*0.3+0.15, Math.random()*0.5+0.2, 0.012, false));
-        // Regular stars
-        for (let i = 0; i < 140; i++)
-          stars.push(mkStar(Math.random()*0.4+0.38, Math.random()*0.65+0.65, 0.020, false));
-        // Bright stars with bloom
-        for (let i = 0; i < 22; i++)
-          stars.push(mkStar(Math.random()*0.28+0.70, Math.random()*1.1+1.5, 0.032, true));
+      /* ── Nebula (painted once to an oversized offscreen canvas) ── */
+      function buildNebula() {
+        const w = W + MARGIN * 2, h = H + MARGIN * 2;
+        const nc = document.createElement('canvas');
+        nc.width  = Math.ceil(w * DPR);
+        nc.height = Math.ceil(h * DPR);
+        nc._cssW = w; nc._cssH = h;
+        const nx = nc.getContext('2d');
+        nx.scale(DPR, DPR); // paint in CSS px, store in HD
+
+        // Deep-space base gradient
+        const base = nx.createRadialGradient(w * 0.5, h * 0.32, 0, w * 0.5, h * 0.32, w * 0.95);
+        base.addColorStop(0, 'rgba(12,9,32,0.96)');
+        base.addColorStop(1, 'rgba(0,0,6,1)');
+        nx.fillStyle = base;
+        nx.fillRect(0, 0, w, h);
+
+        // Colourful glowing clouds (additive blending for realistic bloom)
+        nx.globalCompositeOperation = 'lighter';
+        const clouds = [
+          { cx:0.24, cy:0.22, r:0.52, col:[150,60,255], a:0.30 }, // violet
+          { cx:0.20, cy:0.30, r:0.30, col:[255,70,150], a:0.18 }, // magenta core
+          { cx:0.74, cy:0.60, r:0.50, col:[30,90,255],  a:0.26 }, // blue
+          { cx:0.82, cy:0.68, r:0.26, col:[20,190,205], a:0.16 }, // cyan
+          { cx:0.52, cy:0.90, r:0.40, col:[18,120,190], a:0.18 }, // deep teal
+          { cx:0.88, cy:0.12, r:0.30, col:[120,40,210], a:0.20 }, // purple corner
+          { cx:0.40, cy:0.50, r:0.24, col:[60,90,235],  a:0.12 }, // faint blue
+          { cx:0.62, cy:0.30, r:0.18, col:[255,140,70], a:0.08 }, // warm ember accent
+        ];
+        clouds.forEach(c => {
+          const cxp = c.cx * w, cyp = c.cy * h, rp = c.r * w;
+          const g = nx.createRadialGradient(cxp, cyp, 2, cxp, cyp, rp);
+          g.addColorStop(0,    `rgba(${c.col[0]},${c.col[1]},${c.col[2]},${c.a})`);
+          g.addColorStop(0.45, `rgba(${c.col[0]},${c.col[1]},${c.col[2]},${c.a * 0.35})`);
+          g.addColorStop(1,    'rgba(0,0,0,0)');
+          nx.fillStyle = g;
+          nx.fillRect(0, 0, w, h);
+        });
+
+        // Dark dust lanes to break up the glow (subtractive)
+        nx.globalCompositeOperation = 'source-over';
+        const dust = [
+          { cx:0.30, cy:0.28, r:0.22, a:0.35 },
+          { cx:0.70, cy:0.64, r:0.20, a:0.30 },
+          { cx:0.50, cy:0.46, r:0.16, a:0.22 },
+        ];
+        dust.forEach(d => {
+          const cxp = d.cx * w, cyp = d.cy * h, rp = d.r * w;
+          const g = nx.createRadialGradient(cxp, cyp, 2, cxp, cyp, rp);
+          g.addColorStop(0, `rgba(0,0,6,${d.a})`);
+          g.addColorStop(1, 'rgba(0,0,0,0)');
+          nx.fillStyle = g;
+          nx.fillRect(0, 0, w, h);
+        });
+
+        // Fine grain texture (soft-light keeps it subtle)
+        if (!noiseTile) noiseTile = buildNoise();
+        nx.globalCompositeOperation = 'soft-light';
+        nx.globalAlpha = 0.05;
+        const pat = nx.createPattern(noiseTile, 'repeat');
+        nx.fillStyle = pat;
+        nx.fillRect(0, 0, w, h);
+        nx.globalAlpha = 1;
+        nx.globalCompositeOperation = 'source-over';
+
+        // A couple of dense star-cluster glows for depth
+        nx.globalCompositeOperation = 'lighter';
+        [[0.24,0.22],[0.76,0.60]].forEach(([fx,fy]) => {
+          const g = nx.createRadialGradient(fx*w, fy*h, 0, fx*w, fy*h, 70);
+          g.addColorStop(0, 'rgba(230,225,255,0.10)');
+          g.addColorStop(1, 'rgba(0,0,0,0)');
+          nx.fillStyle = g;
+          nx.fillRect(0, 0, w, h);
+        });
+        nx.globalCompositeOperation = 'source-over';
+
+        return nc;
       }
 
-      function mkStar(base, r, freq, glow) {
-        return { x:Math.random()*W, y:Math.random()*H, r, base,
-                 range: 0.14, phase:Math.random()*Math.PI*2, freq, glow };
+      /* ── Stars (3 depth layers for parallax) ── */
+      function buildStars() {
+        stars = [];
+        const PAD = STAR_SHIFT + 6;
+        // Micro dust — many, tiny, dim, far away (small parallax)
+        for (let i = 0; i < 340; i++)
+          stars.push(mkStar(Math.random()*0.3+0.15, Math.random()*0.5+0.2, 0.012, false, 0.25, PAD));
+        // Regular stars — mid depth
+        for (let i = 0; i < 150; i++)
+          stars.push(mkStar(Math.random()*0.4+0.38, Math.random()*0.65+0.65, 0.020, false, 0.58, PAD));
+        // Bright stars with bloom — near (largest parallax)
+        for (let i = 0; i < 24; i++)
+          stars.push(mkStar(Math.random()*0.28+0.70, Math.random()*1.1+1.5, 0.032, true, 0.92, PAD));
       }
+
+      function mkStar(base, r, freq, glow, depth, pad) {
+        return { x: Math.random()*(W + pad*2) - pad,
+                 y: Math.random()*(H + pad*2) - pad,
+                 r, base, range: 0.14, phase: Math.random()*Math.PI*2,
+                 freq, glow, depth };
+      }
+
+      /* ── Pointer parallax (desktop) ── */
+      if (!REDUCED) {
+        window.addEventListener('mousemove', e => {
+          tx = (e.clientX / W) * 2 - 1;
+          ty = (e.clientY / H) * 2 - 1;
+        }, { passive: true });
+      }
+
+      /* ── Gyroscope parallax (mobile, 3D tilt) ── */
+      let gBeta0 = null, gGamma0 = null;
+      function onOrient(e) {
+        if (e.beta == null || e.gamma == null) return;
+        if (gBeta0 === null) { gBeta0 = e.beta; gGamma0 = e.gamma; } // calibrate to start pose
+        const RANGE = 22; // degrees of tilt mapped to full shift
+        let ntx = (e.gamma - gGamma0) / RANGE;
+        let nty = (e.beta  - gBeta0)  / RANGE;
+        // account for landscape orientation
+        if (Math.abs(window.orientation) === 90) { const s = ntx; ntx = -nty; nty = s; }
+        tx = Math.max(-1, Math.min(1, ntx));
+        ty = Math.max(-1, Math.min(1, nty));
+      }
+      function enableGyro() {
+        if (REDUCED) return;
+        const DOE = window.DeviceOrientationEvent;
+        if (!DOE) return;
+        if (typeof DOE.requestPermission === 'function') {
+          // iOS 13+: needs a user gesture
+          DOE.requestPermission().then(state => {
+            if (state === 'granted') window.addEventListener('deviceorientation', onOrient, true);
+          }).catch(() => {});
+        } else {
+          window.addEventListener('deviceorientation', onOrient, true);
+        }
+      }
+      // Non-iOS fires without permission; iOS waits for the first tap
+      enableGyro();
+      window.addEventListener('touchend', enableGyro, { once: true });
+      window.addEventListener('click', enableGyro, { once: true });
 
       /* ── Main loop ── */
       function frame() {
         t += 0.016;
 
+        // Smooth the parallax toward the target
+        cx += (tx - cx) * 0.06;
+        cy += (ty - cy) * 0.06;
+
         // Background fill
         ctx.fillStyle = '#00000c';
         ctx.fillRect(0, 0, W, H);
 
-        // Nebula
+        // Nebula (far layer, small parallax)
         if (!nebula) nebula = buildNebula();
-        ctx.drawImage(nebula, 0, 0);
+        const nox = cx * NEB_SHIFT, noy = cy * NEB_SHIFT;
+        ctx.drawImage(nebula, -MARGIN + nox, -MARGIN + noy, nebula._cssW, nebula._cssH);
 
-        // Stars
+        // Stars (parallax scaled by depth)
         for (const s of stars) {
           const op = Math.max(0, Math.min(1, s.base + Math.sin(t * s.freq * 60 + s.phase) * s.range));
+          const sx = s.x + cx * STAR_SHIFT * s.depth;
+          const sy = s.y + cy * STAR_SHIFT * s.depth;
           if (s.glow) {
-            const bloom = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, s.r * 6);
+            const bloom = ctx.createRadialGradient(sx, sy, 0, sx, sy, s.r * 6);
             bloom.addColorStop(0,   `rgba(215,228,255,${op * 0.32})`);
             bloom.addColorStop(0.4, `rgba(180,205,255,${op * 0.10})`);
             bloom.addColorStop(1,   'rgba(0,0,0,0)');
             ctx.fillStyle = bloom;
             ctx.beginPath();
-            ctx.arc(s.x, s.y, s.r * 6, 0, Math.PI*2);
+            ctx.arc(sx, sy, s.r * 6, 0, Math.PI*2);
             ctx.fill();
           }
           ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+          ctx.arc(sx, sy, s.r, 0, Math.PI*2);
           ctx.fillStyle = `rgba(${s.glow ? '218,230,255' : '200,215,255'},${op})`;
           ctx.fill();
         }
@@ -149,15 +281,15 @@ const { description, title } = Astro.props;
 
           const fade = s.life > 0.85 ? (1 - s.life) / 0.15
                      : s.life < 0.20 ? s.life / 0.20 : 1;
-          const tx = s.x - Math.cos(s.angle) * s.len;
-          const ty = s.y - Math.sin(s.angle) * s.len;
+          const hx = s.x - Math.cos(s.angle) * s.len;
+          const hy = s.y - Math.sin(s.angle) * s.len;
 
-          const g = ctx.createLinearGradient(tx, ty, s.x, s.y);
+          const g = ctx.createLinearGradient(hx, hy, s.x, s.y);
           g.addColorStop(0,   'rgba(255,255,255,0)');
           g.addColorStop(0.5, `rgba(200,220,255,${fade * 0.55})`);
           g.addColorStop(1,   `rgba(255,255,255,${fade})`);
           ctx.beginPath();
-          ctx.moveTo(tx, ty);
+          ctx.moveTo(hx, hy);
           ctx.lineTo(s.x, s.y);
           ctx.strokeStyle = g;
           ctx.lineWidth   = 1.5;
@@ -174,7 +306,7 @@ const { description, title } = Astro.props;
         }
 
         // Spawn new shooting star (avg every ~5s)
-        if (Math.random() < 0.003) {
+        if (!REDUCED && Math.random() < 0.003) {
           const angle = (Math.random() * 0.45 + 0.12) * Math.PI;
           shooters.push({
             x: Math.random() * W * 0.65, y: Math.random() * H * 0.40,
@@ -186,6 +318,7 @@ const { description, title } = Astro.props;
         requestAnimationFrame(frame);
       }
 
+      resize();
       frame();
     })();
     </script>
