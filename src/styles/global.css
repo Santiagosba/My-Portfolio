@@ -176,10 +176,10 @@
   background-image:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.090) 0%,
-      rgba(255, 255, 255, 0.015) 30%,
-      rgba(0, 0, 0, 0.34) 78%,
-      rgba(255, 132, 70, 0.045) 100%
+      rgba(255, 255, 255, 0.070) 0%,
+      rgba(255, 255, 255, 0.012) 30%,
+      rgba(0, 0, 0, 0.17) 78%,
+      rgba(255, 132, 70, 0.040) 100%
     ),
     linear-gradient(
       108deg,
@@ -188,27 +188,30 @@
       transparent 62%
     );
 
-  /* Refractive glass: moderate blur, boosted saturation + contrast (CoachOS feel) */
-  backdrop-filter: blur(26px) saturate(150%) contrast(1.05) brightness(1.05);
-  -webkit-backdrop-filter: blur(26px) saturate(150%) contrast(1.05) brightness(1.05);
+  /* Refractive glass: more translucent so the nebula bleeds through */
+  backdrop-filter: blur(22px) saturate(155%) contrast(1.05) brightness(1.04);
+  -webkit-backdrop-filter: blur(22px) saturate(155%) contrast(1.05) brightness(1.04);
 
   /* Fine light rim up top, near-invisible on the other edges */
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-top-color: rgba(255, 255, 255, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.11);
+  border-top-color: rgba(255, 255, 255, 0.30);
 
   box-shadow:
     /* Deep outer shadow — the glass floating above the scene */
-    0 28px 78px rgba(0, 0, 0, 0.62),
-    0  6px 22px rgba(0, 0, 0, 0.40),
+    0 30px 80px rgba(0, 0, 0, 0.55),
+    0  6px 22px rgba(0, 0, 0, 0.34),
+    /* Chromatic aberration — outer rim splits light: red one side, cyan the other */
+    -1.5px 0 0 rgba(255, 40, 90, 0.16),
+     1.5px 0 0 rgba(40, 200, 255, 0.18),
     /* Top specular rim */
-    inset 0 1px 0 rgba(255, 255, 255, 0.20),
-    /* CoachOS signature — chromatic edges: pink-red left, ice-blue right */
-    inset  3px 0 12px -3px rgba(255, 72, 118, 0.36),
-    inset -3px 0 12px -3px rgba(75, 178, 255, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    /* Chromatic aberration — soft inner fringe (real lens colour split) */
+    inset  3px 0 10px -3px rgba(255, 40, 90, 0.50),
+    inset -3px 0 10px -3px rgba(40, 200, 255, 0.55),
     /* Bottom thickness in shadow */
-    inset 0 -1px 0 rgba(0, 0, 0, 0.72),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.62),
     /* Soft inner top glow — light entering the glass */
-    inset 0 14px 40px rgba(255, 255, 255, 0.04);
+    inset 0 14px 40px rgba(255, 255, 255, 0.045);
 
   transition: transform 0.40s cubic-bezier(0.34, 1.56, 0.64, 1),
               box-shadow 0.40s ease, border-color 0.40s ease;
@@ -233,57 +236,62 @@
 
 .lg-card:hover {
   transform: translateY(-6px) scale(1.018);
-  border-top-color: rgba(255, 255, 255, 0.50);
+  border-top-color: rgba(255, 255, 255, 0.46);
   box-shadow:
-    0 36px 110px rgba(0, 0, 0, 0.68),
-    0  8px  28px rgba(0, 0, 0, 0.44),
-    inset 0 1px 0 rgba(255, 255, 255, 0.28),
-    /* Chromatic edges glow brighter on hover */
-    inset  3px 0 16px -3px rgba(255, 72, 118, 0.52),
-    inset -3px 0 16px -3px rgba(75, 178, 255, 0.60),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.72),
+    0 36px 110px rgba(0, 0, 0, 0.62),
+    0  8px  28px rgba(0, 0, 0, 0.40),
+    /* Chromatic aberration widens on hover — stronger red/cyan split */
+    -2.5px 0 0 rgba(255, 40, 90, 0.26),
+     2.5px 0 0 rgba(40, 200, 255, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.30),
+    inset  4px 0 14px -3px rgba(255, 40, 90, 0.62),
+    inset -4px 0 14px -3px rgba(40, 200, 255, 0.68),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.62),
     inset 0 14px 40px rgba(255, 255, 255, 0.06),
     /* Picks up nebula purple/blue on hover */
-    0 0 55px rgba(120, 60, 210, 0.22),
-    0 0 30px rgba(60, 120, 235, 0.18);
+    0 0 55px rgba(120, 60, 210, 0.20),
+    0 0 30px rgba(60, 120, 235, 0.16);
 }
 
 /* ── Pill variant (header, buttons, social links) ── */
 .lg-pill {
-  background: linear-gradient(
-    155deg,
-    rgba(255, 255, 255, 0.14) 0%,
-    rgba(200, 215, 255, 0.05) 50%,
-    rgba(255, 255, 255, 0.02) 100%
-  );
-  backdrop-filter: blur(32px) saturate(240%) brightness(1.14);
-  -webkit-backdrop-filter: blur(32px) saturate(240%) brightness(1.14);
-  border-top:    1.5px solid rgba(255, 255, 255, 0.65);
-  border-left:   1px   solid rgba(255, 255, 255, 0.25);
-  border-right:  1px   solid rgba(255, 255, 255, 0.08);
-  border-bottom: 1px   solid rgba(255, 255, 255, 0.06);
+  background-image:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.085) 0%,
+      rgba(255, 255, 255, 0.015) 45%,
+      rgba(0, 0, 0, 0.16) 100%),
+    linear-gradient(108deg, transparent 0%, rgba(255, 255, 255, 0.055) 45%, transparent 65%);
+  backdrop-filter: blur(20px) saturate(155%) contrast(1.05) brightness(1.05);
+  -webkit-backdrop-filter: blur(20px) saturate(155%) contrast(1.05) brightness(1.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top-color: rgba(255, 255, 255, 0.38);
   box-shadow:
-    inset 0   1px 0  rgba(255, 255, 255, 0.60),
-    /* CoachOS chromatic edges — pink left, blue right */
-    inset  2px 0 7px -2px rgba(255, 72, 118, 0.30),
-    inset -2px 0 7px -2px rgba(75, 178, 255, 0.34),
-    inset 0  -1px 0  rgba(0, 0, 0, 0.55),
-    0 10px 32px rgba(0, 0, 0, 0.45),
-    0  3px  8px rgba(0, 0, 0, 0.25);
+    inset 0   1px 0  rgba(255, 255, 255, 0.42),
+    /* Chromatic aberration — red one side, cyan the other */
+    -1px 0 0 rgba(255, 40, 90, 0.15),
+     1px 0 0 rgba(40, 200, 255, 0.17),
+    inset  2px 0 7px -2px rgba(255, 40, 90, 0.42),
+    inset -2px 0 7px -2px rgba(40, 200, 255, 0.46),
+    inset 0  -1px 0  rgba(0, 0, 0, 0.48),
+    0 10px 32px rgba(0, 0, 0, 0.42),
+    0  3px  8px rgba(0, 0, 0, 0.24);
   transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.28s ease;
+              box-shadow 0.28s ease, border-color 0.28s ease;
 }
 
 .lg-pill:hover {
   transform: translateY(-2px) scale(1.03);
+  border-top-color: rgba(255, 255, 255, 0.52);
   box-shadow:
-    inset 0   1px 0  rgba(255, 255, 255, 0.75),
-    inset  2px 0 9px -2px rgba(255, 72, 118, 0.44),
-    inset -2px 0 9px -2px rgba(75, 178, 255, 0.50),
-    inset 0  -1px 0  rgba(0, 0, 0, 0.55),
-    0 14px 40px rgba(0, 0, 0, 0.50),
-    0  4px 12px rgba(0, 0, 0, 0.30),
-    0  0   22px rgba(120, 80, 220, 0.22);
+    inset 0   1px 0  rgba(255, 255, 255, 0.55),
+    -1.5px 0 0 rgba(255, 40, 90, 0.24),
+     1.5px 0 0 rgba(40, 200, 255, 0.28),
+    inset  2px 0 9px -2px rgba(255, 40, 90, 0.56),
+    inset -2px 0 9px -2px rgba(40, 200, 255, 0.62),
+    inset 0  -1px 0  rgba(0, 0, 0, 0.48),
+    0 14px 40px rgba(0, 0, 0, 0.48),
+    0  4px 12px rgba(0, 0, 0, 0.28),
+    0  0   22px rgba(120, 80, 220, 0.20);
 }
 
 /* Fondo Espacial */
