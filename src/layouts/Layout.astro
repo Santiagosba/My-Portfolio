@@ -26,10 +26,10 @@ const { description, title } = Astro.props;
     <title>Santiago Portfolio</title>
   </head>
   <body class="relative bg-black text-white min-h-screen flex flex-col overflow-x-hidden w-full">
-    
-    <!-- Space canvas (stars + nebulae + shooting stars) -->
+
+    <!-- Space canvas (dark sky + nebulae + stars + shooting stars) -->
     <div class="fixed inset-0 -z-10 pointer-events-none">
-      <canvas id="star-canvas" class="w-full h-full"></canvas>
+      <canvas id="star-canvas" class="w-full h-full" style="opacity:0;transition:opacity 1.2s ease"></canvas>
     </div>
 
     <!-- Layout principal -->
@@ -54,15 +54,35 @@ const { description, title } = Astro.props;
       let DPR = Math.min(window.devicePixelRatio || 1, 2);
 
       // Parallax config (CSS px)
-      const NEB_SHIFT  = 26;   // how far the nebula pans
+      const NEB_SHIFT  = 26;   // how far the sky + nebulae pan
       const STAR_SHIFT = 46;   // how far the nearest star layer pans
       const MARGIN     = Math.max(NEB_SHIFT, STAR_SHIFT) + 24; // offscreen bleed
 
-      let W = 0, H = 0, stars = [], shooters = [], nebula = null,
-          noiseTile = null, t = 0;
+      // Nebulae: centre as a fraction of the viewport, radii as a fraction of its mean side
+      const NEBULAE = [
+        { fx:0.82, fy:0.22, rx:0.40, ry:0.24, rot:-0.45, seed:11, kind:'emission',   gain:1.25, warp:1.9 },
+        { fx:0.12, fy:0.82, rx:0.26, ry:0.15, rot: 0.55, seed:29, kind:'reflection', gain:1.0,  warp:1.1 },
+      ];
+
+      // Star colours by temperature (hot blue → cool orange), weighted by how common they look
+      const STAR_TYPES = [
+        [0.12, [170,195,255]],
+        [0.25, [205,220,255]],
+        [0.25, [245,245,255]],
+        [0.18, [255,242,225]],
+        [0.14, [255,215,175]],
+        [0.06, [255,188,150]],
+      ];
+
+      let W = 0, H = 0, stars = [], shooters = [], sky = null,
+          noiseTile = null, t = 0, builtW = 0, builtH = 0, rebuildTimer = 0;
 
       // Parallax state: target (tx,ty) and smoothed (cx,cy), range [-1,1]
       let tx = 0, ty = 0, cx = 0, cy = 0;
+
+      const rand   = (a, b) => a + Math.random() * (b - a);
+      const gauss  = () => Math.sqrt(-2 * Math.log(Math.random() || 1e-9)) * Math.cos(2 * Math.PI * Math.random());
+      const smooth = (a, b, x) => { const k = Math.max(0, Math.min(1, (x - a) / (b - a))); return k * k * (3 - 2 * k); };
 
       /* ── Resize (HD aware) ── */
       function resize() {
@@ -72,12 +92,53 @@ const { description, title } = Astro.props;
         canvas.width  = Math.floor(W * DPR);
         canvas.height = Math.floor(H * DPR);
         ctx.setTransform(DPR, 0, 0, DPR, 0, 0); // draw using CSS px, render in HD
-        nebula = null;
+        // Mobile URL bars resize the viewport while scrolling: only repaint for real layout changes
+        if (!sky) rebuild();
+        else if (W !== builtW || Math.abs(H - builtH) > 160) {
+          clearTimeout(rebuildTimer);
+          rebuildTimer = setTimeout(rebuild, 150);
+        }
+      }
+      function rebuild() {
+        builtW = W; builtH = H;
+        sky = buildSky();
         buildStars();
+        requestAnimationFrame(() => { canvas.style.opacity = '1'; });
       }
       window.addEventListener('resize', resize);
 
-      /* ── Fine noise tile for nebula texture ── */
+      /* ── Seeded value noise + fBm (same nebula shape on every visit) ── */
+      function mulberry32(a) {
+        return function () {
+          a = (a + 0x6D2B79F5) | 0;
+          let r = Math.imul(a ^ (a >>> 15), 1 | a);
+          r = (r + Math.imul(r ^ (r >>> 7), 61 | r)) ^ r;
+          return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+        };
+      }
+      function makeFbm(seed) {
+        const rnd  = mulberry32(seed);
+        const perm = new Uint16Array(512), val = new Float32Array(256);
+        for (let i = 0; i < 256; i++) { perm[i] = i; val[i] = rnd(); }
+        for (let i = 255; i > 0; i--) { const j = (rnd() * (i + 1)) | 0; const k = perm[i]; perm[i] = perm[j]; perm[j] = k; }
+        for (let i = 0; i < 256; i++) perm[i + 256] = perm[i];
+        function noise(x, y) {
+          const xi = Math.floor(x), yi = Math.floor(y);
+          const xf = x - xi, yf = y - yi;
+          const X = xi & 255, Y = yi & 255;
+          const a = val[perm[perm[X] + Y]],     b = val[perm[perm[X + 1] + Y]];
+          const c = val[perm[perm[X] + Y + 1]], d = val[perm[perm[X + 1] + Y + 1]];
+          const u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf);
+          return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+        }
+        return function fbm(x, y, oct) {
+          let sum = 0, amp = 0.5, f = 1, norm = 0;
+          for (let i = 0; i < oct; i++) { sum += amp * noise(x * f, y * f); norm += amp; amp *= 0.5; f *= 2.03; }
+          return sum / norm;
+        };
+      }
+
+      /* ── Fine noise tile to dither the dark gradient ── */
       function buildNoise() {
         const size = 128;
         const nc = document.createElement('canvas');
@@ -93,105 +154,186 @@ const { description, title } = Astro.props;
         return nc;
       }
 
-      /* ── Nebula (painted once to an oversized offscreen canvas) ── */
-      function buildNebula() {
+      /* ── One nebula: domain-warped fBm gives wispy gas, a second field carves dust lanes ── */
+      function paintNebula(nx, n, px0, py0) {
+        const L  = Math.sqrt(W * H);
+        const rx = n.rx * L, ry = n.ry * L, R = Math.max(rx, ry);
+        const size = Math.min(340, Math.ceil(R * 2 / 1.5)); // soft by nature: sample coarse, upscale smooth
+        const off = document.createElement('canvas');
+        off.width = off.height = size;
+        const ox  = off.getContext('2d');
+        const img = ox.createImageData(size, size);
+        const D   = img.data;
+        const fbm = makeFbm(n.seed);
+        const cs = Math.cos(n.rot), sn = Math.sin(n.rot), kx = R / rx, ky = R / ry;
+        const g  = 255 * n.gain;
+        const emission = n.kind === 'emission';
+
+        for (let j = 0; j < size; j++) {
+          for (let i = 0; i < size; i++) {
+            const u0 = (i / size) * 2 - 1, v0 = (j / size) * 2 - 1;
+            const u  = (u0 * cs + v0 * sn) * kx;       // rotate, then stretch into an ellipse
+            const v  = (v0 * cs - u0 * sn) * ky;
+            const r0 = Math.sqrt(u * u + v * v);
+            if (r0 > 1.45) continue;
+
+            const px = u * 1.9, py = v * 1.9;
+            const qx = fbm(px + 1.7, py + 9.2, 3);
+            const qy = fbm(px + 8.3, py + 2.8, 3);
+            const wx = px + n.warp * qx, wy = py + n.warp * qy;
+            const gas = fbm(wx, wy, 6);
+
+            const r  = r0 + (qx - 0.5) * 0.7;          // ragged edge, not a clean ellipse
+            const fall = smooth(0, 1, 1 - r);
+            if (fall <= 0) continue;
+            // bright filaments sitting in a faint diffuse glow
+            let dens = Math.pow(Math.max(0, (gas - 0.34) / 0.66), 1.7) * fall + fall * fall * gas * 0.22;
+            const dust = fbm(wx * 1.7 + 4.1, wy * 1.7 - 3.3, 5);
+            dens *= 1 - 0.9 * smooth(0.5, 0.66, dust);
+            if (dens <= 0.002) continue;
+
+            const core = Math.pow(Math.max(0, 1 - r0 * 1.6), 2.2) * dens; // ionised heart
+            const k = (i + j * size) * 4;
+            if (emission) {           // hydrogen-alpha red/pink, oxygen teal toward the core
+              D[k]     = g * (0.60 * dens + 0.40 * core);
+              D[k + 1] = g * (0.11 * dens + 0.62 * core);
+              D[k + 2] = g * (0.23 * dens + 0.62 * core);
+            } else {                  // starlight scattered by dust: cold blue
+              D[k]     = g * (0.15 * dens + 0.14 * core);
+              D[k + 1] = g * (0.27 * dens + 0.26 * core);
+              D[k + 2] = g * (0.62 * dens + 0.36 * core);
+            }
+            D[k + 3] = 255;
+          }
+        }
+        ox.putImageData(img, 0, 0);
+
+        nx.save();
+        nx.globalCompositeOperation = 'lighter'; // gas glows: add light onto the black sky
+        nx.imageSmoothingEnabled = true;
+        nx.imageSmoothingQuality = 'high';
+        nx.drawImage(off, px0 - R, py0 - R, R * 2, R * 2);
+        nx.restore();
+      }
+
+      /* ── Sky layer (painted once to an oversized offscreen canvas) ── */
+      function buildSky() {
         const w = W + MARGIN * 2, h = H + MARGIN * 2;
-        const nc = document.createElement('canvas');
-        nc.width  = Math.ceil(w * DPR);
-        nc.height = Math.ceil(h * DPR);
-        nc._cssW = w; nc._cssH = h;
-        const nx = nc.getContext('2d');
-        nx.scale(DPR, DPR); // paint in CSS px, store in HD
+        const sc = document.createElement('canvas');
+        sc.width  = Math.ceil(w * DPR);
+        sc.height = Math.ceil(h * DPR);
+        sc._cssW = w; sc._cssH = h;
+        const sx = sc.getContext('2d');
+        sx.scale(DPR, DPR); // paint in CSS px, store in HD
 
-        // Deep-space base gradient
-        const base = nx.createRadialGradient(w * 0.5, h * 0.32, 0, w * 0.5, h * 0.32, w * 0.95);
-        base.addColorStop(0, 'rgba(12,9,32,0.96)');
-        base.addColorStop(1, 'rgba(0,0,6,1)');
-        nx.fillStyle = base;
-        nx.fillRect(0, 0, w, h);
+        // Real night sky: almost black, a whisper of blue, darker toward the edges
+        const base = sx.createRadialGradient(w * 0.5, h * 0.45, 0, w * 0.5, h * 0.45, Math.max(w, h) * 0.75);
+        base.addColorStop(0, 'rgb(4,5,11)');
+        base.addColorStop(1, 'rgb(0,0,2)');
+        sx.fillStyle = base;
+        sx.fillRect(0, 0, w, h);
 
-        // Colourful glowing clouds (additive blending for realistic bloom)
-        nx.globalCompositeOperation = 'lighter';
-        const clouds = [
-          { cx:0.24, cy:0.22, r:0.52, col:[150,60,255], a:0.30 }, // violet
-          { cx:0.20, cy:0.30, r:0.30, col:[255,70,150], a:0.18 }, // magenta core
-          { cx:0.74, cy:0.60, r:0.50, col:[30,90,255],  a:0.26 }, // blue
-          { cx:0.82, cy:0.68, r:0.26, col:[20,190,205], a:0.16 }, // cyan
-          { cx:0.52, cy:0.90, r:0.40, col:[18,120,190], a:0.18 }, // deep teal
-          { cx:0.88, cy:0.12, r:0.30, col:[120,40,210], a:0.20 }, // purple corner
-          { cx:0.40, cy:0.50, r:0.24, col:[60,90,235],  a:0.12 }, // faint blue
-          { cx:0.62, cy:0.30, r:0.18, col:[255,140,70], a:0.08 }, // warm ember accent
-        ];
-        clouds.forEach(c => {
-          const cxp = c.cx * w, cyp = c.cy * h, rp = c.r * w;
-          const g = nx.createRadialGradient(cxp, cyp, 2, cxp, cyp, rp);
-          g.addColorStop(0,    `rgba(${c.col[0]},${c.col[1]},${c.col[2]},${c.a})`);
-          g.addColorStop(0.45, `rgba(${c.col[0]},${c.col[1]},${c.col[2]},${c.a * 0.35})`);
-          g.addColorStop(1,    'rgba(0,0,0,0)');
-          nx.fillStyle = g;
-          nx.fillRect(0, 0, w, h);
-        });
+        NEBULAE.forEach(n => paintNebula(sx, n, MARGIN + n.fx * W, MARGIN + n.fy * H));
 
-        // Dark dust lanes to break up the glow (subtractive)
-        nx.globalCompositeOperation = 'source-over';
-        const dust = [
-          { cx:0.30, cy:0.28, r:0.22, a:0.35 },
-          { cx:0.70, cy:0.64, r:0.20, a:0.30 },
-          { cx:0.50, cy:0.46, r:0.16, a:0.22 },
-        ];
-        dust.forEach(d => {
-          const cxp = d.cx * w, cyp = d.cy * h, rp = d.r * w;
-          const g = nx.createRadialGradient(cxp, cyp, 2, cxp, cyp, rp);
-          g.addColorStop(0, `rgba(0,0,6,${d.a})`);
-          g.addColorStop(1, 'rgba(0,0,0,0)');
-          nx.fillStyle = g;
-          nx.fillRect(0, 0, w, h);
-        });
-
-        // Fine grain texture (soft-light keeps it subtle)
+        // Fine grain so the dark gradient never bands
         if (!noiseTile) noiseTile = buildNoise();
-        nx.globalCompositeOperation = 'soft-light';
-        nx.globalAlpha = 0.05;
-        const pat = nx.createPattern(noiseTile, 'repeat');
-        nx.fillStyle = pat;
-        nx.fillRect(0, 0, w, h);
-        nx.globalAlpha = 1;
-        nx.globalCompositeOperation = 'source-over';
+        sx.globalCompositeOperation = 'soft-light';
+        sx.globalAlpha = 0.05;
+        sx.fillStyle = sx.createPattern(noiseTile, 'repeat');
+        sx.fillRect(0, 0, w, h);
+        sx.globalAlpha = 1;
+        sx.globalCompositeOperation = 'source-over';
 
-        // A couple of dense star-cluster glows for depth
-        nx.globalCompositeOperation = 'lighter';
-        [[0.24,0.22],[0.76,0.60]].forEach(([fx,fy]) => {
-          const g = nx.createRadialGradient(fx*w, fy*h, 0, fx*w, fy*h, 70);
-          g.addColorStop(0, 'rgba(230,225,255,0.10)');
-          g.addColorStop(1, 'rgba(0,0,0,0)');
-          nx.fillStyle = g;
-          nx.fillRect(0, 0, w, h);
-        });
-        nx.globalCompositeOperation = 'source-over';
-
-        return nc;
+        return sc;
       }
 
       /* ── Stars (3 depth layers for parallax) ── */
+      function starColor() {
+        let x = Math.random();
+        for (const [p, c] of STAR_TYPES) if ((x -= p) < 0) return c;
+        return STAR_TYPES[2][1];
+      }
+
+      function mkStar(base, r, depth, range, freq, pad, x, y, col) {
+        const c = col || starColor();
+        return { x: x ?? Math.random()*(W + pad*2) - pad,
+                 y: y ?? Math.random()*(H + pad*2) - pad,
+                 r, base, range, freq, depth, phase: Math.random()*Math.PI*2,
+                 col: c, rgb: c.join(','), sprite: null };
+      }
+
+      // Bloom (+ optional diffraction spikes) pre-rendered once per bright star
+      function glowSprite(s, spikes) {
+        const R = Math.ceil(s.r * (spikes ? 16 : 7));
+        const sc = document.createElement('canvas');
+        sc.width = sc.height = Math.ceil(R * 2 * DPR);
+        const g = sc.getContext('2d');
+        g.scale(DPR, DPR);
+        const [cr, cg, cb] = s.col;
+
+        const bloom = g.createRadialGradient(R, R, 0, R, R, s.r * 6);
+        bloom.addColorStop(0,    `rgba(${cr},${cg},${cb},0.42)`);
+        bloom.addColorStop(0.35, `rgba(${cr},${cg},${cb},0.10)`);
+        bloom.addColorStop(1,    `rgba(${cr},${cg},${cb},0)`);
+        g.fillStyle = bloom;
+        g.fillRect(0, 0, R * 2, R * 2);
+
+        if (spikes) {
+          g.globalCompositeOperation = 'lighter';
+          g.lineWidth = 0.7;
+          for (const [dx, dy] of [[1, 0], [0, 1]]) {
+            const lg = g.createLinearGradient(R - dx*R, R - dy*R, R + dx*R, R + dy*R);
+            lg.addColorStop(0,   `rgba(${cr},${cg},${cb},0)`);
+            lg.addColorStop(0.5, `rgba(${cr},${cg},${cb},0.5)`);
+            lg.addColorStop(1,   `rgba(${cr},${cg},${cb},0)`);
+            g.strokeStyle = lg;
+            g.beginPath();
+            g.moveTo(R - dx*R, R - dy*R);
+            g.lineTo(R + dx*R, R + dy*R);
+            g.stroke();
+          }
+          g.globalCompositeOperation = 'source-over';
+        }
+
+        g.beginPath();
+        g.arc(R, R, s.r, 0, Math.PI * 2);
+        g.fillStyle = `rgb(${Math.min(255, cr + 30)},${Math.min(255, cg + 30)},${Math.min(255, cb + 30)})`;
+        g.fill();
+        sc._R = R;
+        return sc;
+      }
+
       function buildStars() {
         stars = [];
         const PAD = STAR_SHIFT + 6;
-        // Micro dust — many, tiny, dim, far away (small parallax)
-        for (let i = 0; i < 340; i++)
-          stars.push(mkStar(Math.random()*0.3+0.15, Math.random()*0.5+0.2, 0.012, false, 0.25, PAD));
-        // Regular stars — mid depth
-        for (let i = 0; i < 150; i++)
-          stars.push(mkStar(Math.random()*0.4+0.38, Math.random()*0.65+0.65, 0.020, false, 0.58, PAD));
-        // Bright stars with bloom — near (largest parallax)
-        for (let i = 0; i < 24; i++)
-          stars.push(mkStar(Math.random()*0.28+0.70, Math.random()*1.1+1.5, 0.032, true, 0.92, PAD));
-      }
-
-      function mkStar(base, r, freq, glow, depth, pad) {
-        return { x: Math.random()*(W + pad*2) - pad,
-                 y: Math.random()*(H + pad*2) - pad,
-                 r, base, range: 0.14, phase: Math.random()*Math.PI*2,
-                 freq, glow, depth };
+        const k = Math.max(0.45, Math.min(1.4, (W * H) / (1440 * 900)));
+        // Faint background field — the bulk of a dark sky, far away (small parallax)
+        for (let i = 0; i < 620 * k; i++)
+          stars.push(mkStar(rand(0.10, 0.36), rand(0.25, 0.55), 0.25, 0.05, 0.012, PAD));
+        // Mid-brightness stars
+        for (let i = 0; i < 130 * k; i++)
+          stars.push(mkStar(rand(0.38, 0.78), rand(0.55, 1.0), 0.58, 0.10, 0.020, PAD));
+        // Only a handful of bright stars; the brightest show diffraction spikes (near, largest parallax)
+        const bright = Math.round(8 * k + 4);
+        for (let i = 0; i < bright; i++) {
+          const s = mkStar(rand(0.75, 1), rand(1.1, 1.8), 0.92, 0.08, 0.030, PAD);
+          s.sprite = glowSprite(s, i < 3);
+          stars.push(s);
+        }
+        // Young hot stars inside the emission nebula, moving with it
+        const n = NEBULAE[0], L = Math.sqrt(W * H), depth = NEB_SHIFT / STAR_SHIFT;
+        const ncx = n.fx * W, ncy = n.fy * H, sd = n.ry * L * 0.45;
+        for (let i = 0; i < 60 * k; i++) {
+          const hot = STAR_TYPES[Math.random() < 0.6 ? 0 : 1][1];
+          stars.push(mkStar(rand(0.15, 0.55), rand(0.3, 0.8), depth, 0.06, 0.012, PAD,
+                            ncx + gauss() * sd * 1.4, ncy + gauss() * sd, hot));
+        }
+        for (let i = 0; i < 5; i++) {
+          const s = mkStar(rand(0.7, 0.95), rand(0.9, 1.4), depth, 0.06, 0.020, PAD,
+                           ncx + gauss() * sd, ncy + gauss() * sd * 0.7, STAR_TYPES[0][1]);
+          s.sprite = glowSprite(s, false);
+          stars.push(s);
+        }
       }
 
       /* ── Pointer parallax (desktop) ── */
@@ -241,34 +383,29 @@ const { description, title } = Astro.props;
         cx += (tx - cx) * 0.06;
         cy += (ty - cy) * 0.06;
 
-        // Background fill
-        ctx.fillStyle = '#00000c';
+        // Background fill (matches the sky's darkest edge)
+        ctx.fillStyle = '#000002';
         ctx.fillRect(0, 0, W, H);
 
-        // Nebula (far layer, small parallax)
-        if (!nebula) nebula = buildNebula();
-        const nox = cx * NEB_SHIFT, noy = cy * NEB_SHIFT;
-        ctx.drawImage(nebula, -MARGIN + nox, -MARGIN + noy, nebula._cssW, nebula._cssH);
+        // Sky + nebulae (far layer, small parallax)
+        if (sky) ctx.drawImage(sky, -MARGIN + cx * NEB_SHIFT, -MARGIN + cy * NEB_SHIFT, sky._cssW, sky._cssH);
 
         // Stars (parallax scaled by depth)
         for (const s of stars) {
           const op = Math.max(0, Math.min(1, s.base + Math.sin(t * s.freq * 60 + s.phase) * s.range));
           const sx = s.x + cx * STAR_SHIFT * s.depth;
           const sy = s.y + cy * STAR_SHIFT * s.depth;
-          if (s.glow) {
-            const bloom = ctx.createRadialGradient(sx, sy, 0, sx, sy, s.r * 6);
-            bloom.addColorStop(0,   `rgba(215,228,255,${op * 0.32})`);
-            bloom.addColorStop(0.4, `rgba(180,205,255,${op * 0.10})`);
-            bloom.addColorStop(1,   'rgba(0,0,0,0)');
-            ctx.fillStyle = bloom;
+          if (s.sprite) {
+            const R = s.sprite._R;
+            ctx.globalAlpha = op;
+            ctx.drawImage(s.sprite, sx - R, sy - R, R * 2, R * 2);
+            ctx.globalAlpha = 1;
+          } else {
             ctx.beginPath();
-            ctx.arc(sx, sy, s.r * 6, 0, Math.PI*2);
+            ctx.arc(sx, sy, s.r, 0, Math.PI*2);
+            ctx.fillStyle = `rgba(${s.rgb},${op})`;
             ctx.fill();
           }
-          ctx.beginPath();
-          ctx.arc(sx, sy, s.r, 0, Math.PI*2);
-          ctx.fillStyle = `rgba(${s.glow ? '218,230,255' : '200,215,255'},${op})`;
-          ctx.fill();
         }
 
         // Shooting stars
