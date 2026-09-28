@@ -1,0 +1,287 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ReactIcon from "../components/icons/ReactIcon.astro";
+import TypeScriptIcon from "../components/icons/TypescriptIcon.astro";
+import NodeIcon from "../components/icons/NodeIcon.astro";
+import PrismaIcon from "../components/icons/PrismaIcon.astro";
+import PostgreSQLIcon from "../components/icons/PostgreSQLIcon.astro";
+import ThreeJSIcon from "../components/icons/ThreeJSIcon.astro";
+
+const ROLES = [
+  {
+    name: "Trainer",
+    items: [
+      "Dashboard with KPIs, a daily plan and signals that need action",
+      "Client list and full client file: programs, workouts, check-ins, habits, photos",
+      "Program builder with reusable templates and splits",
+      "Session calendar and messaging",
+    ],
+  },
+  {
+    name: "Client",
+    items: [
+      "Today’s workout with a live session logger (sets, reps, weight, RPE)",
+      "Suggested next load, plates-per-side calculator and rest timer",
+      "Progress: bodyweight, e1RM records, strength rating and training history",
+      "Weekly check-in to the coach, habits and ranked leagues",
+    ],
+  },
+  {
+    name: "Admin",
+    items: [
+      "Overview of the platform",
+      "Trainer and user management",
+    ],
+  },
+];
+
+const ENGINEERING = [
+  {
+    title: "Adherence & risk engine",
+    body: "A pure scoring function turns recent activity (days since the last workout, sessions this week, whether there is an active program) into a risk level with human-readable reasons. It was extracted from an inline route into a shared module so the dashboard, notifications and the per-client endpoint all use the same logic.",
+  },
+  {
+    title: "Strength rating",
+    body: "Estimates a one-rep max (Epley) from each logged set, divides it by bodyweight and scores every muscle group from 0 to 100 against sex-specific standards. Compound groups weigh more in the overall rating, and lagging muscles are flagged. Deterministic, no external AI cost.",
+  },
+  {
+    title: "Ranked progress leagues",
+    body: "Strength, mass and definition each map a 0–100 score to a competitive-game style rank, from Iron to Challenger, with divisions and league points, so progress feels like levelling up.",
+  },
+  {
+    title: "Exercise recommender",
+    body: "Maps a client’s free-text goal to an intent (strength, hypertrophy, fat loss, endurance), picks a sets/reps/RPE scheme and scores the exercise library by muscle emphasis with a bias to compound lifts.",
+  },
+];
+
+const STACK = [
+  ["App", "React Native · Expo Router · one codebase for iOS, Android and web"],
+  ["UI", "Custom design system, dark and light themes, liquid-glass surfaces with Three.js on web"],
+  ["API", "Node.js · Express · TypeScript · Zod validation · JWT auth · bcrypt · rate limiting"],
+  ["Data", "Prisma ORM · PostgreSQL · 21 models, from programs and workout logs to check-ins and messages"],
+  ["Media", "Cloudinary for progress photos and videos"],
+  ["Ops", "Docker image, Railway / Render configs for the API, Netlify for the web app, migration script from the SQLite prototype"],
+];
+---
+
+<Layout
+  title="CoachOS case study · Santiago Benítez Álvarez"
+  description="How I designed and built CoachOS, a full-stack platform for personal trainers and their clients: React Native, Node, TypeScript, Prisma and PostgreSQL."
+>
+  <article class="case max-w-5xl mx-auto pt-10 sm:pt-20 pb-10">
+    <a href="/#Projects" class="back">← Back to projects</a>
+
+    <!-- HERO -->
+    <header class="mt-8">
+      <span class="kicker">Case study · Full-stack product</span>
+      <h1 class="mt-3 text-4xl sm:text-6xl font-semibold tracking-tight text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]">CoachOS</h1>
+      <p class="mt-5 text-lg sm:text-2xl text-white/90 max-w-3xl leading-relaxed">
+        One place for personal trainers to run their business, and for their clients to train, log and see progress.
+      </p>
+
+      <dl class="meta">
+        <div><dt>Type</dt><dd>Personal project</dd></div>
+        <div><dt>My role</dt><dd>Product design & full-stack development</dd></div>
+        <div><dt>Platforms</dt><dd>iOS · Android · Web</dd></div>
+      </dl>
+
+      <div class="flex flex-wrap items-center gap-4 mt-8">
+        <a href="https://coachsystem.netlify.app" target="_blank" rel="noopener noreferrer" class="btn">Open the live app ↗</a>
+        <div class="flex gap-3" aria-label="Main technologies">
+          <ReactIcon class="w-7 h-7" />
+          <TypeScriptIcon class="w-7 h-7" />
+          <NodeIcon class="w-7 h-7" />
+          <PrismaIcon class="w-7 h-7" />
+          <PostgreSQLIcon class="w-7 h-7" />
+          <ThreeJSIcon class="w-7 h-7" />
+        </div>
+      </div>
+    </header>
+
+    <figure class="shot mt-12">
+      <img src="/projects/coachos/dashboard.webp" alt="CoachOS trainer dashboard: KPIs, clients that need attention and the daily plan" width="1440" height="900" />
+      <figcaption>Trainer dashboard: KPIs, clients that need attention and a prioritised plan for the day.</figcaption>
+    </figure>
+
+    <!-- PROBLEM -->
+    <section class="cs-section">
+      <h2>The problem</h2>
+      <p>
+        Personal trainers usually juggle spreadsheets for programs, chat apps for check-ins and notes for everything else.
+        Clients lose track of their plan, trainers only notice someone is drifting when they have already stopped coming,
+        and progress is hard to show.
+      </p>
+      <p>
+        CoachOS puts programming, logging, communication and progress in one product, and turns the data into actions:
+        who needs a message today, which block is about to end, who just hit a personal record.
+      </p>
+    </section>
+
+    <!-- ROLES -->
+    <section class="cs-section">
+      <h2>What it does</h2>
+      <div class="grid gap-6 md:grid-cols-3 mt-6">
+        {ROLES.map((r) => (
+          <div class="lg-card p-6">
+            <h3 class="text-lg font-semibold text-blue-300">{r.name}</h3>
+            <ul class="list">
+              {r.items.map((i) => <li>{i}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ENGINEERING -->
+    <section class="cs-section">
+      <h2>Engineering highlights</h2>
+      <p>The logic that makes the product useful lives in small, deterministic modules on the API, not in the screens.</p>
+      <div class="grid gap-6 md:grid-cols-2 mt-6">
+        {ENGINEERING.map((e) => (
+          <div class="lg-card p-6">
+            <h3 class="text-lg font-semibold text-white">{e.title}</h3>
+            <p class="mt-2 text-white/80 leading-relaxed">{e.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ARCHITECTURE -->
+    <section class="cs-section">
+      <h2>Architecture</h2>
+      <div class="arch lg-card mt-6" role="img" aria-label="The Expo app talks to an Express REST API, which uses Prisma to reach PostgreSQL and Cloudinary for media">
+        <div class="node">
+          <strong>Expo app</strong>
+          <span>iOS · Android · Web</span>
+        </div>
+        <div class="edge">REST + JWT</div>
+        <div class="node">
+          <strong>Express API</strong>
+          <span>TypeScript · Zod · rate limit</span>
+        </div>
+        <div class="edge">Prisma</div>
+        <div class="node">
+          <strong>PostgreSQL</strong>
+          <span>21 models</span>
+        </div>
+      </div>
+      <dl class="stack mt-6">
+        {STACK.map(([k, v]) => (
+          <div><dt>{k}</dt><dd>{v}</dd></div>
+        ))}
+      </dl>
+    </section>
+
+    <figure class="shot">
+      <img src="/projects/coachos/dashboard-light.webp" alt="CoachOS dashboard in the light theme" width="1440" height="900" loading="lazy" />
+      <figcaption>The same dashboard in the light theme. Every surface is built on shared design tokens.</figcaption>
+    </figure>
+
+    <!-- NEXT -->
+    <section class="cs-section">
+      <h2>What’s next</h2>
+      <ul class="list">
+        <li>Payments and invoicing with Stripe</li>
+        <li>Clients booking and cancelling sessions themselves</li>
+        <li>Turning the rule-based daily plan into an AI copilot on top of the same signals</li>
+      </ul>
+    </section>
+
+    <div class="mt-16 flex flex-wrap gap-4">
+      <a href="https://coachsystem.netlify.app" target="_blank" rel="noopener noreferrer" class="btn">Open the live app ↗</a>
+      <a href="/#Projects" class="btn">← Back to projects</a>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .back {
+    @apply text-sm text-white/70 hover:text-white transition-colors;
+  }
+  .kicker {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-orange-300;
+  }
+  .meta {
+    @apply mt-8 grid gap-4 sm:grid-cols-3;
+  }
+  .meta dt, .stack dt {
+    @apply text-xs uppercase tracking-[0.14em] text-white/50;
+  }
+  .meta dd {
+    @apply mt-1 text-white/90;
+  }
+  .shot {
+    @apply mt-16;
+  }
+  .shot img {
+    @apply w-full h-auto rounded-2xl;
+    border: 1px solid rgba(255,255,255,0.15);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+  }
+  .shot figcaption {
+    @apply mt-3 text-sm text-white/60;
+  }
+  .cs-section {
+    @apply mt-20;
+  }
+  .cs-section h2 {
+    @apply text-2xl sm:text-4xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)];
+  }
+  .cs-section > p {
+    @apply mt-4 text-white/80 text-lg leading-relaxed max-w-3xl;
+  }
+  .list {
+    @apply mt-4 space-y-2 text-white/80;
+  }
+  .list li {
+    @apply relative pl-5;
+  }
+  .list li::before {
+    content: "";
+    @apply absolute left-0 top-[0.6em] w-1.5 h-1.5 rounded-full bg-orange-300;
+    box-shadow: 0 0 8px rgba(253,186,116,0.8);
+  }
+  .arch {
+    @apply p-6 sm:p-8 flex flex-col md:flex-row items-stretch md:items-center gap-3 md:gap-4;
+  }
+  .node {
+    @apply md:flex-1 self-stretch flex flex-col justify-center rounded-2xl px-5 py-4 text-center;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.14);
+  }
+  .node strong {
+    @apply block text-white;
+  }
+  .node span {
+    @apply block mt-1 text-sm text-white/60;
+  }
+  .edge {
+    @apply text-xs uppercase tracking-[0.14em] text-orange-300 text-center whitespace-nowrap;
+  }
+  .edge::after {
+    content: " →";
+  }
+  @media (max-width: 767px) {
+    .edge::after { content: " ↓"; }
+  }
+  .stack {
+    @apply grid gap-x-8 gap-y-5 sm:grid-cols-2;
+  }
+  .stack dd {
+    @apply mt-1 text-white/90 leading-relaxed;
+  }
+  .btn {
+    @apply inline-block px-5 py-2 rounded-full text-sm font-medium text-white/90;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.16);
+    border-top-color: rgba(255,255,255,0.38);
+    backdrop-filter: blur(7px) saturate(150%);
+    -webkit-backdrop-filter: blur(7px) saturate(150%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.24), 0 8px 24px rgba(0,0,0,0.38);
+    transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1), background 0.28s ease;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.1);
+  }
+</style>

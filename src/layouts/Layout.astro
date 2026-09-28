@@ -17,13 +17,9 @@ const { description, title } = Astro.props;
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={description} />
-
-    <meta
-      name="description"
-      content="Santiago's personal portfolio showcasing his work and skills."
-    />
-    <title>Santiago Portfolio</title>
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <title>{title}</title>
   </head>
   <body class="relative bg-black text-white min-h-screen flex flex-col overflow-x-hidden w-full">
 

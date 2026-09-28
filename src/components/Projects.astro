@@ -12,12 +12,21 @@ import PrismaIcon from "./icons/PrismaIcon.astro";
 import PostgreSQLIcon from "./icons/PostgreSQLIcon.astro";
 ---
 
-<div class="grid gap-10 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto">
-  <!-- Proyecto -->
-  <article class="project-card lg-card">
-    <img src="/projects/coachos.webp" alt="CoachOS" class="project-img" loading="lazy" />
-    <h3 class="project-title">CoachOS</h3>
-    <p class="project-desc">A platform for personal trainers and their clients. Trainers manage clients, training programs and a session calendar, while clients follow their daily workout, log sets, reps, weight and RPE, and track their training history. Built with React Native (Expo) and a Node + Express + TypeScript API with Prisma and PostgreSQL.</p>
+<!-- Featured -->
+<article class="featured lg-card max-w-6xl mx-auto">
+  <a href="/coachos" class="featured-media" aria-label="Read the CoachOS case study">
+    <img src="/projects/coachos/dashboard.webp" alt="CoachOS trainer dashboard" class="featured-img" loading="lazy" />
+  </a>
+  <div class="featured-body">
+    <span class="kicker">Featured · Full-stack product</span>
+    <h3 class="project-title !mt-2 !text-2xl sm:!text-3xl">CoachOS</h3>
+    <p class="project-desc !text-base">A platform for personal trainers and their clients. Trainers run their whole business from one dashboard; clients follow their plan, log every set and watch their progress.</p>
+    <ul class="highlights sm:grid-cols-2 sm:gap-x-6">
+      <li>Adherence engine that flags at-risk clients before they quit</li>
+      <li>Strength rating per muscle group from e1RM and bodyweight</li>
+      <li>Ranked progress leagues, check-ins, habits and progress photos</li>
+      <li>Trainer, client and admin roles on iOS, Android and web</li>
+    </ul>
     <div class="project-tags">
       <ReactIcon class="w-7 h-7" />
       <TypeScriptIcon class="w-7 h-7" />
@@ -26,12 +35,34 @@ import PostgreSQLIcon from "./icons/PostgreSQLIcon.astro";
       <PostgreSQLIcon class="w-7 h-7" />
     </div>
     <div class="project-links">
-      <a href="https://github.com/Santiagosba/CoachOS" target="_blank" class="btn">View Code</a>
-      <a href="https://coachsystem.netlify.app" target="_blank" class="btn">View Project</a>
+      <a href="/coachos" class="btn">Read case study →</a>
+      <a href="https://coachsystem.netlify.app" target="_blank" rel="noopener noreferrer" class="btn">Live app</a>
+    </div>
+  </div>
+</article>
+
+<!-- Playground -->
+<div class="max-w-6xl mx-auto mt-16 sm:mt-24">
+  <h3 class="text-2xl sm:text-3xl font-semibold text-white drop-shadow-[0_2px_6px_rgba(173,216,230,0.5)]">Playground</h3>
+  <p class="mt-2 text-white/70">Smaller builds where I explore 3D, audio and UI ideas.</p>
+</div>
+
+<div class="playground grid gap-6 sm:grid-cols-3 max-w-6xl mx-auto mt-8">
+  <article class="project-card lg-card">
+    <img src="/projects/RubikCube.webp" alt="Rubik Cube 3D" class="project-img" loading="lazy" />
+    <h3 class="project-title">Rubik Cube 3D</h3>
+    <p class="project-desc">A 3D interactive Rubik’s Cube built with React and Three.js.</p>
+    <div class="project-tags">
+      <ReactIcon class="w-7 h-7" />
+      <ViteIcon class="w-7 h-7" />
+      <ThreeJSIcon class="w-7 h-7" />
+    </div>
+    <div class="project-links">
+      <a href="https://github.com/Santiagosba/Rubik-Cube" target="_blank" rel="noopener noreferrer" class="btn">View Code</a>
+      <a href="https://rubikcube3d.netlify.app/" target="_blank" rel="noopener noreferrer" class="btn">View Project</a>
     </div>
   </article>
 
-  <!-- Proyecto -->
   <article class="project-card lg-card">
     <img src="/projects/bmth_media_player.webp" alt="Music Player" class="project-img" loading="lazy" />
     <h3 class="project-title">BMTH Music Player</h3>
@@ -43,28 +74,11 @@ import PostgreSQLIcon from "./icons/PostgreSQLIcon.astro";
       <TailwindIcon class="w-7 h-7" />
     </div>
     <div class="project-links">
-      <a href="https://github.com/Santiagosba/Bmth-Media-Player" target="_blank" class="btn">View Code</a>
-      <a href="https://bmthmediaplayer.netlify.app/" target="_blank" class="btn">View Project</a>
+      <a href="https://github.com/Santiagosba/Bmth-Media-Player" target="_blank" rel="noopener noreferrer" class="btn">View Code</a>
+      <a href="https://bmthmediaplayer.netlify.app/" target="_blank" rel="noopener noreferrer" class="btn">View Project</a>
     </div>
   </article>
 
-  <!-- Proyecto -->
-  <article class="project-card lg-card">
-    <img src="/projects/RubikCube.webp" alt="Rubik Cube 3D" class="project-img" loading="lazy" />
-    <h3 class="project-title">Rubik Cube 3D</h3>
-    <p class="project-desc">A 3D interactive Rubik’s Cube built with React and Three.js.</p>
-    <div class="project-tags">
-      <ReactIcon class="w-7 h-7" />
-      <ViteIcon class="w-7 h-7" />
-      <ThreeJSIcon class="w-7 h-7" />
-    </div>
-    <div class="project-links">
-      <a href="https://github.com/Santiagosba/Rubik-Cube" target="_blank" class="btn">View Code</a>
-      <a href="https://rubikcube3d.netlify.app/" target="_blank" class="btn">View Project</a>
-    </div>
-  </article>
-
-  <!-- Proyecto -->
   <article class="project-card lg-card">
     <img src="/projects/Digital World Clock.webp" alt="World Clock" class="project-img" loading="lazy" />
     <h3 class="project-title">World Clock</h3>
@@ -75,65 +89,62 @@ import PostgreSQLIcon from "./icons/PostgreSQLIcon.astro";
       <JavascriptIcon class="w-7 h-7" />
     </div>
     <div class="project-links">
-      <a href="https://github.com/Santiagosba/Digital-World-Clock" target="_blank" class="btn">View Code</a>
-      <a href="https://militarclock.netlify.app/" target="_blank" class="btn">View Project</a>
+      <a href="https://github.com/Santiagosba/Digital-World-Clock" target="_blank" rel="noopener noreferrer" class="btn">View Code</a>
+      <a href="https://militarclock.netlify.app/" target="_blank" rel="noopener noreferrer" class="btn">View Project</a>
     </div>
   </article>
-
-  <!-- Proyecto
-  <article class="project-card from-emerald-400/40 via-teal-400/30 to-cyan-500/40">
-    <img src="/projects/calculator.webp" alt="Calculator App" class="project-img" loading="lazy" />
-    <h3 class="project-title">Chess 3D</h3>
-    <p class="project-desc">A 3D chess game with realistic graphics and AI opponents.</p>
-    <div class="project-tags">
-      <HtmlIcon class="w-7 h-7" />
-      <CSSIcon class="w-7 h-7" />
-      <JavascriptIcon class="w-7 h-7" />
-    </div>
-    <div class="project-links">
-      <a href="https://github.com/tuusuario/calculator" target="_blank" class="btn">View Code</a>
-      <a href="https://calc-demo.vercel.app" target="_blank" class="btn">View Project</a>
-    </div>
-  </article> -->
-
-  <!-- Proyecto 
-  <article class="project-card from-sky-400/40 via-cyan-400/30 to-blue-500/40">
-    <img src="/projects/weather-app.webp" alt="Weather App" class="project-img" loading="lazy" />
-    <h3 class="project-title">Weather App</h3>
-    <p class="project-desc">A weather forecast app fetching real-time data from an API.</p>
-    <div class="project-tags">
-      <HtmlIcon class="w-7 h-7" />
-      <CSSIcon class="w-7 h-7" />
-      <JavascriptIcon class="w-7 h-7" />
-    </div>
-    <div class="project-links">
-      <a href="https://github.com/tuusuario/weather-app" target="_blank" class="btn">View Code</a>
-      <a href="https://weather-demo.vercel.app" target="_blank" class="btn">View Project</a>
-    </div>
-  </article> -->
-
-  <!-- 🚀 Nuevo Proyecto 
-  <article class="project-card from-purple-400/40 via-fuchsia-400/30 to-pink-500/40">
-    <img src="/projects/task-manager.webp" alt="Task Manager App" class="project-img" loading="lazy" />
-    <h3 class="project-title">Space Invader 3D</h3>
-    <p class="project-desc">A 3D space invader game with stunning graphics and engaging gameplay.</p>
-    <div class="project-tags">
-      <ReactIcon class="w-7 h-7" />
-      <ViteIcon class="w-7 h-7" />
-      <TailwindIcon class="w-7 h-7" />
-    </div>
-    <div class="project-links">
-      <a href="https://github.com/tuusuario/task-manager" target="_blank" class="btn">View Code</a>
-      <a href="https://taskmanager-demo.vercel.app" target="_blank" class="btn">View Project</a>
-    </div>
-  </article>  -->
-</div> 
-
-
+</div>
 
 <style>
+  .featured {
+    @apply p-5 sm:p-7 grid gap-6 sm:gap-8;
+  }
+  .featured-media {
+    @apply block rounded-2xl overflow-hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .featured-img {
+    @apply w-full h-full object-cover object-left-top;
+    aspect-ratio: 16 / 10;
+    transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
+  }
+  .featured-media:hover .featured-img {
+    transform: scale(1.03);
+  }
+  .kicker {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-orange-300;
+  }
+  .highlights {
+    @apply mt-4 grid gap-2 text-sm text-white/80;
+  }
+  .highlights li {
+    @apply relative pl-5;
+  }
+  .highlights li::before {
+    content: "";
+    @apply absolute left-0 top-[0.55em] w-1.5 h-1.5 rounded-full bg-orange-300;
+    box-shadow: 0 0 8px rgba(253,186,116,0.8);
+  }
   .project-card {
     @apply p-6;
+  }
+  .playground .project-card {
+    @apply p-4 flex flex-col;
+  }
+  .playground .project-img {
+    height: 140px;
+  }
+  .playground .project-title {
+    @apply text-lg;
+  }
+  .playground .project-tags :global(svg) {
+    @apply w-6 h-6;
+  }
+  .playground .project-links {
+    @apply mt-auto pt-5 gap-2;
+  }
+  .playground .btn {
+    @apply px-3 text-xs;
   }
   .project-img {
     @apply rounded-2xl w-full object-cover shadow-lg;
@@ -151,7 +162,7 @@ import PostgreSQLIcon from "./icons/PostgreSQLIcon.astro";
     @apply flex gap-3 mt-4;
   }
   .project-links {
-    @apply flex gap-3 mt-5;
+    @apply flex flex-wrap gap-3 mt-5;
   }
   .btn {
     @apply px-4 py-1.5 rounded-full text-sm font-medium text-white/90;
